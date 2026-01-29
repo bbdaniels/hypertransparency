@@ -4,7 +4,7 @@
 
 Hypertransparency creates searchable, navigable documentation of your AI-assisted development process, showing the complete conversation history between you and Claude.
 
-![Demo](demo/screenshot.png)
+**[Live Demo](https://bbdaniels.github.io/hypertransparency/)**
 
 ## Features
 
