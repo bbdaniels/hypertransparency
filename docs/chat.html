@@ -1292,19 +1292,31 @@
             }
 
             // Add image links if this message has assigned images
+            // Skip images that are already referenced in markdown to avoid duplicates
             if (msgId) {
                 const assignedImages = getImagesForMessage(msgId);
                 if (assignedImages.length > 0) {
-                    html += '<div class="inline-images">';
-                    assignedImages.forEach(img => {
-                        // Use versioned path based on message timestamp
-                        const imgPath = msgTimestamp ?
-                            getVersionedImagePath(img.name, msgTimestamp) :
-                            img.path;
-                        const label = img.name.replace('.png', '').replace(/_/g, ' ');
-                        html += `<img src="${imgPath}" alt="${escapeHtml(label)}" title="${escapeHtml(label)}" onclick="event.stopPropagation(); openLightbox('${imgPath}');">`;
+                    // Get raw text to check for existing markdown image references
+                    const rawText = content.text || content.textPreview || '';
+
+                    // Filter out images already in markdown
+                    const newImages = assignedImages.filter(img => {
+                        return !rawText.includes(`](${img.path})`) &&
+                               !rawText.includes(`](images/${img.name})`);
                     });
-                    html += '</div>';
+
+                    if (newImages.length > 0) {
+                        html += '<div class="inline-images">';
+                        newImages.forEach(img => {
+                            // Use versioned path based on message timestamp
+                            const imgPath = msgTimestamp ?
+                                getVersionedImagePath(img.name, msgTimestamp) :
+                                img.path;
+                            const label = img.name.replace('.png', '').replace(/_/g, ' ');
+                            html += `<img src="${imgPath}" alt="${escapeHtml(label)}" title="${escapeHtml(label)}" onclick="event.stopPropagation(); openLightbox('${imgPath}');">`;
+                        });
+                        html += '</div>';
+                    }
                 }
             }
 
@@ -1369,28 +1381,27 @@
             let exhibits = [];
             let commits = [];
 
-            // Add image versions as separate entries (shows when each image changed)
-            Object.entries(state.imageVersions).forEach(([imageName, versions]) => {
-                versions.forEach((v, idx) => {
-                    // Parse commit timestamp (supports ISO format)
-                    const versionTime = new Date(v.timestamp).getTime();
-                    if (isNaN(versionTime)) return;
+            // Build exhibits from state.images using file mtime for accurate timestamps
+            state.images.forEach(img => {
+                const imgTime = new Date(img.timestamp).getTime();
+                if (isNaN(imgTime)) return;
 
-                    const label = imageName.replace('.png', '').replace(/_/g, ' ');
-                    const versionLabel = versions.length > 1 ? ` (v${idx + 1})` : '';
+                const label = img.name.replace('.png', '').replace('.svg', '').replace(/_/g, ' ');
 
-                    exhibits.push({
-                        label: label + versionLabel,
-                        imageName: imageName,
-                        timestamp: versionTime,
-                        url: v.localPath,
-                        commitHash: v.commitHash,
-                        timeStr: formatTime(versionTime),
-                        dateStr: formatDate(versionTime),
-                        isVersion: versions.length > 1,
-                        versionNum: idx + 1,
-                        totalVersions: versions.length
-                    });
+                // Check if this image has version history for badge display
+                const versions = state.imageVersions[img.name];
+                const hasVersions = versions && versions.length > 1;
+
+                exhibits.push({
+                    label: label,
+                    imageName: img.name,
+                    timestamp: imgTime,  // Use file mtime, not commit time
+                    url: img.path,
+                    timeStr: formatTime(imgTime),
+                    dateStr: formatDate(imgTime),
+                    isVersion: hasVersions,
+                    versionNum: hasVersions ? versions.length : null,
+                    totalVersions: hasVersions ? versions.length : null
                 });
             });
 
