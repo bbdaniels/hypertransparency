@@ -828,6 +828,29 @@
         .load-more button:hover {
             background: #0066d6;
         }
+
+        .built-with {
+            position: fixed;
+            bottom: 8px;
+            left: 8px;
+            font-size: 11px;
+            color: var(--meta-text);
+            background: var(--bg);
+            padding: 4px 8px;
+            border-radius: 4px;
+            opacity: 0.7;
+            z-index: 100;
+        }
+        .built-with:hover {
+            opacity: 1;
+        }
+        .built-with a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+        .built-with a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -1498,5 +1521,9 @@
         // Start
         init();
     </script>
+
+    <div class="built-with">
+        Built with <a href="https://github.com/bbdaniels/hypertransparency" target="_blank">Hypertransparency</a>
+    </div>
 </body>
 </html>
