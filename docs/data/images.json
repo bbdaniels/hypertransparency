@@ -2,11 +2,25 @@
   "version": "1.0",
   "images": [
     {
-      "id": "img_demo_chart",
-      "name": "demo_chart.png",
-      "path": "images/demo_chart.png",
-      "timestamp": "2026-01-29T02:01:30",
-      "fileSize": 45000
+      "id": "img_revenue_trends",
+      "name": "revenue_trends.svg",
+      "path": "images/revenue_trends.svg",
+      "timestamp": "2026-01-28T14:01:35",
+      "fileSize": 3500
+    },
+    {
+      "id": "img_category_breakdown",
+      "name": "category_breakdown.svg",
+      "path": "images/category_breakdown.svg",
+      "timestamp": "2026-01-28T14:02:05",
+      "fileSize": 2800
+    },
+    {
+      "id": "img_marketing_roi",
+      "name": "marketing_roi.svg",
+      "path": "images/marketing_roi.svg",
+      "timestamp": "2026-01-28T14:02:35",
+      "fileSize": 3200
     }
   ]
 }

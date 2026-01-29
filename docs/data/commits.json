@@ -2,17 +2,40 @@
   "version": "1.0",
   "commits": [
     {
-      "hash": "abc1234",
-      "fullHash": "abc1234567890abcdef1234567890abcdef123456",
-      "timestamp": "2026-01-29 02:01:30 -0500",
-      "message": "Add hypertransparency documentation",
+      "hash": "commit001",
+      "fullHash": "commit001234567890abcdef1234567890abcdef123456",
+      "timestamp": "2026-01-28 14:01:35 -0500",
+      "message": "Add revenue trends visualization",
       "author": "Developer",
       "filesChanged": [
-        {"status": "A", "path": "docs/index.html"},
-        {"status": "A", "path": "docs/chat.html"}
+        {"status": "A", "path": "images/revenue_trends.svg"}
       ],
-      "relatedMessages": ["msg_demo004"],
-      "relatedArtifacts": []
+      "relatedMessages": ["msg_demo005"],
+      "relatedArtifacts": ["img_revenue_trends"]
+    },
+    {
+      "hash": "commit002",
+      "fullHash": "commit002234567890abcdef1234567890abcdef123456",
+      "timestamp": "2026-01-28 14:02:05 -0500",
+      "message": "Add category breakdown chart",
+      "author": "Developer",
+      "filesChanged": [
+        {"status": "A", "path": "images/category_breakdown.svg"}
+      ],
+      "relatedMessages": ["msg_demo006"],
+      "relatedArtifacts": ["img_category_breakdown"]
+    },
+    {
+      "hash": "commit003",
+      "fullHash": "commit003234567890abcdef1234567890abcdef123456",
+      "timestamp": "2026-01-28 14:02:35 -0500",
+      "message": "Add marketing ROI analysis",
+      "author": "Developer",
+      "filesChanged": [
+        {"status": "A", "path": "images/marketing_roi.svg"}
+      ],
+      "relatedMessages": ["msg_demo007"],
+      "relatedArtifacts": ["img_marketing_roi"]
     }
   ]
 }

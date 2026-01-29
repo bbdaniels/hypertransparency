@@ -1,19 +1,19 @@
 {
   "version": "1.0",
-  "projectName": "Hypertransparency Demo",
-  "generatedAt": "2026-01-29T02:30:00",
+  "projectName": "Sales Analysis Demo",
+  "generatedAt": "2026-01-28T14:05:00",
   "stats": {
-    "totalMessages": 5,
-    "totalCommits": 1,
-    "totalImages": 1,
-    "totalArtifacts": 0
+    "totalMessages": 9,
+    "totalCommits": 3,
+    "totalImages": 3,
+    "totalArtifacts": 3
   },
   "messageFiles": [
     {
       "file": "messages-001.json",
       "startIndex": 0,
-      "endIndex": 4,
-      "count": 5
+      "endIndex": 8,
+      "count": 9
     }
   ]
 }

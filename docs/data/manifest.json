@@ -1,19 +1,19 @@
 {
   "version": "1.0",
   "project": {
-    "name": "Hypertransparency Demo",
-    "description": "Example documentation site showing AI-assisted development conversations",
+    "name": "Sales Analysis Demo",
+    "description": "AI-assisted sales data analysis with visualizations",
     "repository": "https://github.com/bbdaniels/hypertransparency",
     "branch": "main"
   },
-  "generated": "2026-01-29T03:00:00.000000",
+  "generated": "2026-01-28T14:05:00.000000",
   "stats": {
-    "totalMessages": 5,
-    "userMessages": 2,
-    "assistantMessages": 3,
-    "totalArtifacts": 0,
-    "totalCommits": 1,
-    "totalImages": 1,
+    "totalMessages": 9,
+    "userMessages": 3,
+    "assistantMessages": 6,
+    "totalArtifacts": 3,
+    "totalCommits": 3,
+    "totalImages": 3,
     "sessions": 1
   },
   "pagination": {
@@ -22,6 +22,6 @@
   },
   "sources": {
     "sessions": ["demo-session"],
-    "lastModified": "2026-01-29T03:00:00.000000"
+    "lastModified": "2026-01-28T14:05:00.000000"
   }
 }
