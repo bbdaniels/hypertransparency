@@ -970,6 +970,18 @@
                 state.images = imagesData.images || [];
                 state.imageVersions = imageVersionsData.imageVersions || {};
 
+                // Build image assignments from pre-computed data (computed at build time)
+                // Each image has an assignedMessageId field
+                state.imageAssignments = {};
+                state.images.forEach(img => {
+                    if (img.assignedMessageId) {
+                        if (!state.imageAssignments[img.assignedMessageId]) {
+                            state.imageAssignments[img.assignedMessageId] = [];
+                        }
+                        state.imageAssignments[img.assignedMessageId].push(img);
+                    }
+                });
+
                 // Update stats
                 document.getElementById('stat-messages').textContent = manifest.stats.totalMessages;
                 document.getElementById('stat-commits').textContent = manifest.stats.totalCommits;
@@ -977,26 +989,48 @@
 
                 // Render sidebar
                 renderCommits();
-
-                // Load ALL messages for correct image-to-message assignment
-                // Images are assigned to the nearest message before their timestamp,
-                // so we need all messages loaded to compute this correctly
-                const allMessages = [];
-                for (let p = 1; p <= state.totalPages; p++) {
-                    const pageNum = String(p).padStart(3, '0');
-                    const data = await fetch(`data/messages-${pageNum}.json`).then(r => r.json());
-                    allMessages.push(...data.messages);
-                }
-                state.messages = allMessages;
-                state.currentPage = state.totalPages;
-
-                // Compute image assignments with full message set
-                computeImageAssignments();
-
-                // Render all messages and minimap
-                renderMessages(state.messages, false);
                 renderMinimap();
-                document.getElementById('load-more').style.display = 'none';
+
+                // Find unique pages that contain image-assigned messages
+                const imagePagesSet = new Set();
+                state.images.forEach(img => {
+                    if (img.assignedMessagePage) {
+                        imagePagesSet.add(img.assignedMessagePage);
+                    }
+                });
+
+                // Always load the most recent page
+                imagePagesSet.add(state.totalPages);
+
+                // Load all needed pages in parallel for fast initial display
+                const pagesToLoad = Array.from(imagePagesSet).sort((a, b) => a - b);
+                console.log(`Loading ${pagesToLoad.length} pages in parallel:`, pagesToLoad);
+
+                const pagePromises = pagesToLoad.map(p => {
+                    const pageNum = String(p).padStart(3, '0');
+                    return fetch(`data/messages-${pageNum}.json`).then(r => r.json());
+                });
+
+                const pageResults = await Promise.all(pagePromises);
+
+                // Merge all messages and sort by timestamp
+                let allLoadedMessages = [];
+                pageResults.forEach(data => {
+                    allLoadedMessages.push(...data.messages);
+                });
+                allLoadedMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+                state.messages = allLoadedMessages;
+                // Track which pages are loaded for "Load More" button
+                state.loadedPages = new Set(pagesToLoad);
+                state.currentPage = pagesToLoad.length;
+
+                // Hide "Load More" if all pages are loaded
+                if (state.loadedPages.size >= state.totalPages) {
+                    document.getElementById('load-more').style.display = 'none';
+                }
+
+                renderMessages(state.messages, false);
 
                 // Scroll to bottom to show recent messages
                 setTimeout(() => {
@@ -1012,39 +1046,47 @@
         }
 
         async function loadMoreMessages() {
-            if (state.loading || state.currentPage >= state.totalPages) return;
+            // Initialize loadedPages if not set (backwards compatibility)
+            if (!state.loadedPages) {
+                state.loadedPages = new Set();
+            }
+
+            if (state.loading || state.loadedPages.size >= state.totalPages) return;
 
             state.loading = true;
-            state.currentPage++;
 
-            // Load pages from newest to oldest (start with last page = most recent)
-            // This gives chronological order: oldest messages at top, newest at bottom
-            const pageNum = String(state.totalPages - state.currentPage + 1).padStart(3, '0');
+            // Find next unloaded page (oldest first, since we're prepending)
+            let nextPage = null;
+            for (let p = 1; p <= state.totalPages; p++) {
+                if (!state.loadedPages.has(p)) {
+                    nextPage = p;
+                    break;
+                }
+            }
+
+            if (!nextPage) {
+                state.loading = false;
+                document.getElementById('load-more').style.display = 'none';
+                return;
+            }
+
+            const pageNum = String(nextPage).padStart(3, '0');
             try {
                 const data = await fetch(`data/messages-${pageNum}.json`).then(r => r.json());
-                // Keep messages in chronological order (don't reverse)
                 const msgs = data.messages;
 
-                // First load: append normally. Subsequent: prepend older messages at top
-                if (state.currentPage === 1) {
-                    state.messages = msgs;
-                    computeImageAssignments();  // Assign images to closest messages
-                    renderMessages(msgs, false);
-                    // Scroll to bottom to show recent messages
-                    setTimeout(() => {
-                        const chat = document.getElementById('chat');
-                        chat.scrollTop = chat.scrollHeight;
-                    }, 100);
-                } else {
-                    // Prepend older messages
-                    state.messages = [...msgs, ...state.messages];
-                    computeImageAssignments();  // Re-compute with all messages
-                    // Re-render all messages to ensure correct image placement
-                    renderMessages(state.messages, false);
-                }
+                // Add to loaded pages
+                state.loadedPages.add(nextPage);
+
+                // Merge and sort all messages
+                state.messages = [...state.messages, ...msgs];
+                state.messages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+                // Re-render all messages
+                renderMessages(state.messages, false);
                 renderMinimap();
 
-                if (state.currentPage >= state.totalPages) {
+                if (state.loadedPages.size >= state.totalPages) {
                     document.getElementById('load-more').style.display = 'none';
                 }
             } catch (err) {

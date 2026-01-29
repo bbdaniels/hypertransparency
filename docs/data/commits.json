@@ -2,76 +2,456 @@
   "version": "1.0",
   "commits": [
     {
-      "hash": "commit001",
-      "fullHash": "commit001234567890abcdef1234567890abcdef123456",
-      "timestamp": "2026-01-28 14:01:30 -0500",
-      "message": "Add revenue trends visualization (draft)",
-      "author": "Developer",
+      "hash": "6200097",
+      "fullHash": "6200097ad89f7429a257e10e7dc0ed9ba7606797",
+      "timestamp": "2026-01-29 13:05:54 -0500",
+      "message": "Initial release: hypertransparency documentation generator",
+      "author": "Benjamin Daniels",
       "filesChanged": [
-        {"status": "A", "path": "images/revenue_trends.svg"}
+        {
+          "status": "A",
+          "path": ".gitignore"
+        },
+        {
+          "status": "A",
+          "path": "LICENSE"
+        },
+        {
+          "status": "A",
+          "path": "README.md"
+        },
+        {
+          "status": "A",
+          "path": "demo/chat.html"
+        },
+        {
+          "status": "A",
+          "path": "demo/index.html"
+        },
+        {
+          "status": "A",
+          "path": "pyproject.toml"
+        },
+        {
+          "status": "A",
+          "path": "src/__init__.py"
+        },
+        {
+          "status": "A",
+          "path": "src/builder.py"
+        },
+        {
+          "status": "A",
+          "path": "src/cli.py"
+        },
+        {
+          "status": "A",
+          "path": "templates/chat.html"
+        },
+        {
+          "status": "A",
+          "path": "templates/index.html"
+        }
       ],
-      "relatedMessages": ["msg_demo005"],
-      "relatedArtifacts": ["img_revenue_trends"]
+      "relatedMessages": [],
+      "relatedArtifacts": []
     },
     {
-      "hash": "commit002",
-      "fullHash": "commit002234567890abcdef1234567890abcdef123456",
-      "timestamp": "2026-01-28 14:02:00 -0500",
-      "message": "Add category breakdown chart (draft)",
-      "author": "Developer",
+      "hash": "6ab13b5",
+      "fullHash": "6ab13b57a8db4139726389f5dd4b1cd93579f723",
+      "timestamp": "2026-01-29 13:06:20 -0500",
+      "message": "Add demo data files for GitHub Pages",
+      "author": "Benjamin Daniels",
       "filesChanged": [
-        {"status": "A", "path": "images/category_breakdown.svg"}
+        {
+          "status": "M",
+          "path": ".gitignore"
+        },
+        {
+          "status": "A",
+          "path": "demo/data/artifacts.json"
+        },
+        {
+          "status": "A",
+          "path": "demo/data/commits.json"
+        },
+        {
+          "status": "A",
+          "path": "demo/data/image-versions.json"
+        },
+        {
+          "status": "A",
+          "path": "demo/data/images.json"
+        },
+        {
+          "status": "A",
+          "path": "demo/data/index.json"
+        },
+        {
+          "status": "A",
+          "path": "demo/data/manifest.json"
+        },
+        {
+          "status": "A",
+          "path": "demo/data/messages-001.json"
+        }
       ],
-      "relatedMessages": ["msg_demo006"],
-      "relatedArtifacts": ["img_category_breakdown"]
+      "relatedMessages": [],
+      "relatedArtifacts": []
     },
     {
-      "hash": "commit003",
-      "fullHash": "commit003234567890abcdef1234567890abcdef123456",
-      "timestamp": "2026-01-28 14:02:30 -0500",
-      "message": "Add marketing ROI analysis (draft)",
-      "author": "Developer",
+      "hash": "2e5785a",
+      "fullHash": "2e5785aa10a21c041b18a1f9f9928589100325a2",
+      "timestamp": "2026-01-29 13:09:08 -0500",
+      "message": "Move demo to docs folder for GitHub Pages",
+      "author": "Benjamin Daniels",
       "filesChanged": [
-        {"status": "A", "path": "images/marketing_roi.svg"}
+        {
+          "status": "M",
+          "path": "README.md"
+        },
+        {
+          "status": "R100",
+          "path": "demo/chat.html"
+        },
+        {
+          "status": "R100",
+          "path": "demo/data/artifacts.json"
+        },
+        {
+          "status": "R100",
+          "path": "demo/data/commits.json"
+        },
+        {
+          "status": "R100",
+          "path": "demo/data/image-versions.json"
+        },
+        {
+          "status": "R100",
+          "path": "demo/data/images.json"
+        },
+        {
+          "status": "R100",
+          "path": "demo/data/index.json"
+        },
+        {
+          "status": "R100",
+          "path": "demo/data/manifest.json"
+        },
+        {
+          "status": "R100",
+          "path": "demo/data/messages-001.json"
+        },
+        {
+          "status": "R100",
+          "path": "demo/index.html"
+        }
       ],
-      "relatedMessages": ["msg_demo007"],
-      "relatedArtifacts": ["img_marketing_roi"]
+      "relatedMessages": [],
+      "relatedArtifacts": []
     },
     {
-      "hash": "commit004",
-      "fullHash": "commit004234567890abcdef1234567890abcdef123456",
-      "timestamp": "2026-01-28 14:03:55 -0500",
-      "message": "Update revenue trends with 2025 data",
-      "author": "Developer",
+      "hash": "0fc4e77",
+      "fullHash": "0fc4e77cf3ac521cc80b3afb0b7d2c6fad0a9f5a",
+      "timestamp": "2026-01-29 13:23:53 -0500",
+      "message": "Add realistic demo with sales analysis visualizations",
+      "author": "Benjamin Daniels",
       "filesChanged": [
-        {"status": "M", "path": "images/revenue_trends.svg"}
+        {
+          "status": "M",
+          "path": "docs/data/commits.json"
+        },
+        {
+          "status": "M",
+          "path": "docs/data/image-versions.json"
+        },
+        {
+          "status": "M",
+          "path": "docs/data/images.json"
+        },
+        {
+          "status": "M",
+          "path": "docs/data/index.json"
+        },
+        {
+          "status": "M",
+          "path": "docs/data/manifest.json"
+        },
+        {
+          "status": "M",
+          "path": "docs/data/messages-001.json"
+        },
+        {
+          "status": "A",
+          "path": "docs/images/category_breakdown.svg"
+        },
+        {
+          "status": "A",
+          "path": "docs/images/marketing_roi.svg"
+        },
+        {
+          "status": "A",
+          "path": "docs/images/revenue_trends.svg"
+        }
       ],
-      "relatedMessages": ["msg_demo011"],
-      "relatedArtifacts": ["img_revenue_trends"]
+      "relatedMessages": [],
+      "relatedArtifacts": []
     },
     {
-      "hash": "commit005",
-      "fullHash": "commit005234567890abcdef1234567890abcdef123456",
-      "timestamp": "2026-01-28 14:04:25 -0500",
-      "message": "Sort category chart and add colors",
-      "author": "Developer",
+      "hash": "7638c94",
+      "fullHash": "7638c94618d0f2e6ac70e04783990198fb9f25f8",
+      "timestamp": "2026-01-29 13:29:18 -0500",
+      "message": "Add image version history to demo",
+      "author": "Benjamin Daniels",
       "filesChanged": [
-        {"status": "M", "path": "images/category_breakdown.svg"}
+        {
+          "status": "M",
+          "path": "docs/data/commits.json"
+        },
+        {
+          "status": "M",
+          "path": "docs/data/image-versions.json"
+        },
+        {
+          "status": "M",
+          "path": "docs/data/images.json"
+        },
+        {
+          "status": "M",
+          "path": "docs/data/index.json"
+        },
+        {
+          "status": "M",
+          "path": "docs/data/manifest.json"
+        },
+        {
+          "status": "M",
+          "path": "docs/data/messages-001.json"
+        },
+        {
+          "status": "A",
+          "path": "docs/images/category_breakdown_v1.svg"
+        },
+        {
+          "status": "A",
+          "path": "docs/images/marketing_roi_v1.svg"
+        },
+        {
+          "status": "A",
+          "path": "docs/images/revenue_trends_v1.svg"
+        }
       ],
-      "relatedMessages": ["msg_demo012"],
-      "relatedArtifacts": ["img_category_breakdown"]
+      "relatedMessages": [],
+      "relatedArtifacts": []
     },
     {
-      "hash": "commit006",
-      "fullHash": "commit006234567890abcdef1234567890abcdef123456",
-      "timestamp": "2026-01-28 14:04:55 -0500",
-      "message": "Add regression trend line to ROI chart",
-      "author": "Developer",
+      "hash": "56733fe",
+      "fullHash": "56733feab9c11f1f56e5dd7ffeffbc819db84188",
+      "timestamp": "2026-01-29 13:42:11 -0500",
+      "message": "Align image/commit timestamps with message timestamps",
+      "author": "Benjamin Daniels",
       "filesChanged": [
-        {"status": "M", "path": "images/marketing_roi.svg"}
+        {
+          "status": "M",
+          "path": "docs/data/commits.json"
+        },
+        {
+          "status": "M",
+          "path": "docs/data/image-versions.json"
+        }
       ],
-      "relatedMessages": ["msg_demo013"],
-      "relatedArtifacts": ["img_marketing_roi"]
+      "relatedMessages": [],
+      "relatedArtifacts": []
+    },
+    {
+      "hash": "77507d0",
+      "fullHash": "77507d08fdce92321a4e3005bf2fcacf0e37f197",
+      "timestamp": "2026-01-29 13:43:50 -0500",
+      "message": "Add clear visual distinction between draft and final versions",
+      "author": "Benjamin Daniels",
+      "filesChanged": [
+        {
+          "status": "M",
+          "path": "docs/images/category_breakdown.svg"
+        },
+        {
+          "status": "M",
+          "path": "docs/images/category_breakdown_v1.svg"
+        },
+        {
+          "status": "M",
+          "path": "docs/images/marketing_roi.svg"
+        },
+        {
+          "status": "M",
+          "path": "docs/images/marketing_roi_v1.svg"
+        },
+        {
+          "status": "M",
+          "path": "docs/images/revenue_trends.svg"
+        },
+        {
+          "status": "M",
+          "path": "docs/images/revenue_trends_v1.svg"
+        }
+      ],
+      "relatedMessages": [],
+      "relatedArtifacts": []
+    },
+    {
+      "hash": "41ebc9c",
+      "fullHash": "41ebc9ce6d770f95b96add4a3dc6b3e4e6971f2a",
+      "timestamp": "2026-01-29 13:49:11 -0500",
+      "message": "Fix markdown image versioning based on message timestamp",
+      "author": "Benjamin Daniels",
+      "filesChanged": [
+        {
+          "status": "M",
+          "path": "docs/chat.html"
+        },
+        {
+          "status": "M",
+          "path": "docs/data/image-versions.json"
+        }
+      ],
+      "relatedMessages": [],
+      "relatedArtifacts": []
+    },
+    {
+      "hash": "bdce1a5",
+      "fullHash": "bdce1a552cedce5b3abf65a1049fcc00d692c711",
+      "timestamp": "2026-01-29 14:13:56 -0500",
+      "message": "Fix exhibits panel timestamp parsing for ISO format",
+      "author": "Benjamin Daniels",
+      "filesChanged": [
+        {
+          "status": "M",
+          "path": "docs/chat.html"
+        }
+      ],
+      "relatedMessages": [],
+      "relatedArtifacts": []
+    },
+    {
+      "hash": "d6b33e0",
+      "fullHash": "d6b33e02bd23019bcd441d96eaeb3fe278e89c0c",
+      "timestamp": "2026-01-29 16:01:15 -0500",
+      "message": "Add repository link and show project name in header",
+      "author": "Benjamin Daniels",
+      "filesChanged": [
+        {
+          "status": "M",
+          "path": "docs/chat.html"
+        }
+      ],
+      "relatedMessages": [],
+      "relatedArtifacts": []
+    },
+    {
+      "hash": "bc7dd5f",
+      "fullHash": "bc7dd5f0f65c0f0e68c0c574efcdf77beeefe054",
+      "timestamp": "2026-01-29 16:02:03 -0500",
+      "message": "Add 'Built with Hypertransparency' attribution footer",
+      "author": "Benjamin Daniels",
+      "filesChanged": [
+        {
+          "status": "M",
+          "path": "docs/chat.html"
+        }
+      ],
+      "relatedMessages": [],
+      "relatedArtifacts": []
+    },
+    {
+      "hash": "f0bfc91",
+      "fullHash": "f0bfc919fe81a45199debf4e578c8c6e6584a458",
+      "timestamp": "2026-01-29 16:06:14 -0500",
+      "message": "Fix image-to-message matching: use nearest message before image",
+      "author": "Benjamin Daniels",
+      "filesChanged": [
+        {
+          "status": "M",
+          "path": "docs/chat.html"
+        }
+      ],
+      "relatedMessages": [],
+      "relatedArtifacts": []
+    },
+    {
+      "hash": "2b28611",
+      "fullHash": "2b28611b7f99d7c8e373431a21b740bc5cbaab94",
+      "timestamp": "2026-01-29 16:07:35 -0500",
+      "message": "Sync templates/chat.html with docs/chat.html",
+      "author": "Benjamin Daniels",
+      "filesChanged": [
+        {
+          "status": "M",
+          "path": "templates/chat.html"
+        }
+      ],
+      "relatedMessages": [],
+      "relatedArtifacts": []
+    },
+    {
+      "hash": "d4d6cb9",
+      "fullHash": "d4d6cb9d93177719ba453884cd8c4d5a647320f9",
+      "timestamp": "2026-01-29 16:11:17 -0500",
+      "message": "Add auto-rebuild hook for Claude Code integration",
+      "author": "Benjamin Daniels",
+      "filesChanged": [
+        {
+          "status": "M",
+          "path": "pyproject.toml"
+        },
+        {
+          "status": "M",
+          "path": "src/cli.py"
+        },
+        {
+          "status": "A",
+          "path": "templates/hooks/post-session.sh"
+        }
+      ],
+      "relatedMessages": [],
+      "relatedArtifacts": []
+    },
+    {
+      "hash": "5337c31",
+      "fullHash": "5337c31d461c61234d60008a210658e6dc909bdd",
+      "timestamp": "2026-01-29 16:53:30 -0500",
+      "message": "Load all messages upfront for correct image assignment",
+      "author": "Benjamin Daniels",
+      "filesChanged": [
+        {
+          "status": "M",
+          "path": "docs/chat.html"
+        },
+        {
+          "status": "M",
+          "path": "templates/chat.html"
+        }
+      ],
+      "relatedMessages": [],
+      "relatedArtifacts": []
+    },
+    {
+      "hash": "903f97c",
+      "fullHash": "903f97ccc74a7fed7c63ade34129c6969ab2890f",
+      "timestamp": "2026-01-29 17:20:04 -0500",
+      "message": "Fix image display with parallel page loading",
+      "author": "Benjamin Daniels",
+      "filesChanged": [
+        {
+          "status": "M",
+          "path": "src/builder.py"
+        },
+        {
+          "status": "M",
+          "path": "templates/chat.html"
+        }
+      ],
+      "relatedMessages": [],
+      "relatedArtifacts": []
     }
   ]
 }
