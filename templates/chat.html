@@ -991,19 +991,12 @@
                 renderCommits();
                 renderMinimap();
 
-                // Find unique pages that contain image-assigned messages
-                const imagePagesSet = new Set();
-                state.images.forEach(img => {
-                    if (img.assignedMessagePage) {
-                        imagePagesSet.add(img.assignedMessagePage);
-                    }
-                });
-
-                // Always load the most recent page
-                imagePagesSet.add(state.totalPages);
-
-                // Load all needed pages in parallel for fast initial display
-                const pagesToLoad = Array.from(imagePagesSet).sort((a, b) => a - b);
+                // Load ALL pages in parallel for complete message display
+                // This ensures users see all messages, not just image-related ones
+                const pagesToLoad = [];
+                for (let p = 1; p <= state.totalPages; p++) {
+                    pagesToLoad.push(p);
+                }
                 console.log(`Loading ${pagesToLoad.length} pages in parallel:`, pagesToLoad);
 
                 const pagePromises = pagesToLoad.map(p => {
