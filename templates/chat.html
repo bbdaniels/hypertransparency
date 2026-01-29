@@ -991,10 +991,11 @@
                 renderCommits();
                 renderMinimap();
 
-                // Load ALL pages in parallel for complete message display
-                // This ensures users see all messages, not just image-related ones
+                // Load recent pages initially (last 3 pages for fast startup)
+                // Users can click "Load More" to see older messages
                 const pagesToLoad = [];
-                for (let p = 1; p <= state.totalPages; p++) {
+                const startPage = Math.max(1, state.totalPages - 2);  // Last 3 pages
+                for (let p = startPage; p <= state.totalPages; p++) {
                     pagesToLoad.push(p);
                 }
                 console.log(`Loading ${pagesToLoad.length} pages in parallel:`, pagesToLoad);
@@ -1374,27 +1375,60 @@
             let exhibits = [];
             let commits = [];
 
-            // Build exhibits from state.images using file mtime for accurate timestamps
+            // Build exhibits from imageVersions to show ALL versions (v1, v2, etc.)
+            // This shows historical versions in chronological order
+            Object.entries(state.imageVersions).forEach(([imageName, versions]) => {
+                if (!versions || versions.length === 0) return;
+
+                const totalVersions = versions.length;
+                versions.forEach((ver, idx) => {
+                    const versionNum = idx + 1;
+                    const verTime = new Date(ver.timestamp).getTime();
+                    if (isNaN(verTime)) return;
+
+                    const label = imageName.replace('.png', '').replace('.svg', '').replace(/_/g, ' ');
+
+                    // Find the image assignment info from state.images (for current version)
+                    const imgInfo = state.images.find(i => i.name === imageName);
+
+                    exhibits.push({
+                        label: label,
+                        imageName: imageName,
+                        timestamp: verTime,
+                        url: ver.localPath,
+                        timeStr: formatTime(verTime),
+                        dateStr: formatDate(verTime),
+                        isVersion: totalVersions > 1,
+                        versionNum: versionNum,
+                        totalVersions: totalVersions,
+                        commitHash: ver.commitHash ? ver.commitHash.substring(0, 7) : null,
+                        // Only the latest version gets message assignment
+                        assignedMessageId: (versionNum === totalVersions && imgInfo) ? imgInfo.assignedMessageId : null,
+                        assignedMessagePage: (versionNum === totalVersions && imgInfo) ? imgInfo.assignedMessagePage : null
+                    });
+                });
+            });
+
+            // Also add images that don't have version history (from state.images)
             state.images.forEach(img => {
+                // Skip if already in exhibits (has version history)
+                if (state.imageVersions[img.name]) return;
+
                 const imgTime = new Date(img.timestamp).getTime();
                 if (isNaN(imgTime)) return;
 
                 const label = img.name.replace('.png', '').replace('.svg', '').replace(/_/g, ' ');
 
-                // Check if this image has version history for badge display
-                const versions = state.imageVersions[img.name];
-                const hasVersions = versions && versions.length > 1;
-
                 exhibits.push({
                     label: label,
                     imageName: img.name,
-                    timestamp: imgTime,  // Use file mtime, not commit time
+                    timestamp: imgTime,
                     url: img.path,
                     timeStr: formatTime(imgTime),
                     dateStr: formatDate(imgTime),
-                    isVersion: hasVersions,
-                    versionNum: hasVersions ? versions.length : null,
-                    totalVersions: hasVersions ? versions.length : null,
+                    isVersion: false,
+                    versionNum: null,
+                    totalVersions: null,
                     assignedMessageId: img.assignedMessageId,
                     assignedMessagePage: img.assignedMessagePage
                 });
