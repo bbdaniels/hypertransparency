@@ -828,6 +828,29 @@
         .load-more button:hover {
             background: #0066d6;
         }
+
+        .built-with {
+            position: fixed;
+            bottom: 8px;
+            left: 8px;
+            font-size: 11px;
+            color: var(--meta-text);
+            background: var(--bg);
+            padding: 4px 8px;
+            border-radius: 4px;
+            opacity: 0.7;
+            z-index: 100;
+        }
+        .built-with:hover {
+            opacity: 1;
+        }
+        .built-with a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+        .built-with a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -841,6 +864,7 @@
                 </div>
             </div>
             <div class="header-actions">
+                <a id="repo-link" class="header-btn" href="#" target="_blank" title="View Repository">&#x1F517;</a>
                 <button class="header-btn" onclick="toggleSearch()">&#x1F50D;</button>
                 <button class="header-btn" onclick="toggleSidebar()">&#x2630;</button>
             </div>
@@ -925,8 +949,15 @@
 
                 // Update page title and header from manifest
                 document.title = `${state.project.name} - Development Chat`;
-                document.getElementById('header-title').textContent = `Claude + Developer`;
-                document.getElementById('header-subtitle').textContent = state.project.name;
+                document.getElementById('header-title').textContent = state.project.name;
+                document.getElementById('header-subtitle').textContent = state.project.description || 'AI Development Documentation';
+
+                // Set repository link
+                if (state.project.repository) {
+                    document.getElementById('repo-link').href = state.project.repository;
+                } else {
+                    document.getElementById('repo-link').style.display = 'none';
+                }
 
                 // Load supporting data
                 const [commitsData, imagesData, imageVersionsData] = await Promise.all([
@@ -1084,7 +1115,7 @@
             });
         }
 
-        // Pre-compute image assignments: each image goes to its closest message
+        // Pre-compute image assignments: each image goes to the nearest message before it
         function computeImageAssignments() {
             state.imageAssignments = {};  // msgId -> [images]
 
@@ -1095,11 +1126,13 @@
 
                 state.messages.forEach(msg => {
                     const msgTime = new Date(msg.timestamp).getTime();
-                    const diff = Math.abs(imgTime - msgTime);
-                    // Only consider messages within 5 minutes
-                    if (diff <= 5 * 60 * 1000 && diff < closestDiff) {
-                        closestDiff = diff;
-                        closestMsg = msg;
+                    // Only consider messages that occur BEFORE the image was created
+                    if (msgTime <= imgTime) {
+                        const diff = imgTime - msgTime;
+                        if (diff < closestDiff) {
+                            closestDiff = diff;
+                            closestMsg = msg;
+                        }
                     }
                 });
 
@@ -1129,15 +1162,13 @@
             // Parse message timestamp
             const msgTime = new Date(msgTimestamp).getTime();
 
-            // Find the most recent commit that changed this image BEFORE the message
-            // Versions are stored chronologically, so we find the last one before msgTime
+            // Find the most recent commit that changed this image BEFORE or AT the message time
+            // Versions are stored chronologically, so we find the last one at or before msgTime
             let bestVersion = null;
             for (const v of versions) {
-                // Parse commit timestamp (format: "2026-01-29 01:32:55 -0500")
-                // Convert "2026-01-29 01:32:55 -0500" to ISO format for parsing
-                const tsMatch = v.timestamp.match(/^(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})/);
-                if (!tsMatch) continue;
-                const commitTime = new Date(`${tsMatch[1]}T${tsMatch[2]}`).getTime();
+                // Parse commit timestamp (supports ISO format like "2026-01-28T14:01:30.000Z")
+                const commitTime = new Date(v.timestamp).getTime();
+                if (isNaN(commitTime)) continue;
                 if (commitTime <= msgTime) {
                     bestVersion = v;
                 }
@@ -1167,6 +1198,19 @@
 
                 try {
                     html = marked.parse(text);
+
+                    // Post-process: Replace markdown image paths with versioned paths
+                    if (msgTimestamp && html) {
+                        html = html.replace(/<img\s+([^>]*?)src="([^"]+)"([^>]*)>/gi, (match, before, src, after) => {
+                            // Extract image name from path
+                            const imgName = src.split('/').pop();
+                            const versionedPath = getVersionedImagePath(imgName, msgTimestamp);
+                            if (versionedPath !== src) {
+                                console.log(`Versioning image ${imgName}: ${src} -> ${versionedPath} for timestamp ${msgTimestamp}`);
+                            }
+                            return `<img ${before}src="${versionedPath}"${after}>`;
+                        });
+                    }
                 } catch (e) {
                     console.warn('Markdown parse error:', e);
                 }
@@ -1263,10 +1307,9 @@
             // Add image versions as separate entries (shows when each image changed)
             Object.entries(state.imageVersions).forEach(([imageName, versions]) => {
                 versions.forEach((v, idx) => {
-                    // Parse commit timestamp
-                    const tsMatch = v.timestamp.match(/^(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})/);
-                    if (!tsMatch) return;
-                    const versionTime = new Date(`${tsMatch[1]}T${tsMatch[2]}`).getTime();
+                    // Parse commit timestamp (supports ISO format)
+                    const versionTime = new Date(v.timestamp).getTime();
+                    if (isNaN(versionTime)) return;
 
                     const label = imageName.replace('.png', '').replace(/_/g, ' ');
                     const versionLabel = versions.length > 1 ? ` (v${idx + 1})` : '';
@@ -1480,5 +1523,9 @@
         // Start
         init();
     </script>
+
+    <div class="built-with">
+        Built with <a href="https://github.com/bbdaniels/hypertransparency" target="_blank">Hypertransparency</a>
+    </div>
 </body>
 </html>
