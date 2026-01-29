@@ -429,17 +429,19 @@ class HypertransparencyBuilder:
 
     def compute_image_assignments(self, images: List[dict], messages: List[dict]) -> List[dict]:
         """
-        Assign each image to the nearest message that occurs BEFORE the image timestamp.
-        This is computed at build time so the frontend doesn't need to load all messages.
+        Assign each image to the nearest ASSISTANT message that occurs BEFORE the image timestamp.
+        Only assistant messages can create images, so we skip user messages.
 
-        If an image timestamp is before all messages, assign it to the first message.
+        If an image timestamp is before all assistant messages, assign it to the first assistant message.
         """
         if not messages:
             return images
 
-        # Parse message timestamps once
+        # Parse message timestamps - only assistant messages (they're the ones that create images)
         msg_times = []
         for msg in messages:
+            if msg.get("role") != "assistant":
+                continue  # Skip user messages
             try:
                 ts = msg["timestamp"].replace("Z", "").split(".")[0]
                 msg_time = datetime.fromisoformat(ts)
@@ -452,19 +454,19 @@ class HypertransparencyBuilder:
 
         # Sort messages by timestamp
         msg_times.sort(key=lambda x: x[1])
-        first_msg = msg_times[0][0]
+        first_assistant_msg = msg_times[0][0]
 
-        # Assign each image to nearest preceding message
+        # Assign each image to nearest preceding assistant message
         for img in images:
             try:
                 img_time = datetime.fromisoformat(img["timestamp"])
             except:
-                # If we can't parse timestamp, assign to first message
-                img["assignedMessageId"] = first_msg["id"]
+                # If we can't parse timestamp, assign to first assistant message
+                img["assignedMessageId"] = first_assistant_msg["id"]
                 img["assignmentDiffSeconds"] = None
                 continue
 
-            # Find the closest message BEFORE (or at) this image's timestamp
+            # Find the closest assistant message BEFORE (or at) this image's timestamp
             closest_msg = None
             closest_diff = None
 
@@ -479,8 +481,8 @@ class HypertransparencyBuilder:
                 img["assignedMessageId"] = closest_msg["id"]
                 img["assignmentDiffSeconds"] = closest_diff
             else:
-                # Image is before all messages - assign to first message
-                img["assignedMessageId"] = first_msg["id"]
+                # Image is before all assistant messages - assign to first assistant message
+                img["assignedMessageId"] = first_assistant_msg["id"]
                 img["assignmentDiffSeconds"] = None
 
         return images

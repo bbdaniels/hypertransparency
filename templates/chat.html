@@ -1520,15 +1520,31 @@
         async function scrollToMessageById(msgId, msgPage) {
             if (!msgId) return;
 
-            // If page is specified and not already loaded, load it
-            if (msgPage !== undefined && msgPage !== null) {
-                // Check if page is already loaded by looking for any message from that page
-                const existingMsg = document.querySelector(`.msg-row[data-msg-id="${msgId}"]`);
-                if (!existingMsg) {
-                    // Need to load the page - load pages until we have the target
-                    while (state.currentPage < msgPage && state.currentPage < state.totalPages) {
-                        await loadMoreMessages();
+            // Ensure loadedPages is initialized
+            if (!state.loadedPages) {
+                state.loadedPages = new Set();
+            }
+
+            // If page is specified and not already loaded, load it directly
+            if (msgPage !== undefined && msgPage !== null && !state.loadedPages.has(msgPage)) {
+                const pageNum = String(msgPage).padStart(3, '0');
+                try {
+                    const data = await fetch(`data/messages-${pageNum}.json`).then(r => r.json());
+                    state.loadedPages.add(msgPage);
+
+                    // Merge and sort messages
+                    state.messages = [...state.messages, ...data.messages];
+                    state.messages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+                    // Re-render
+                    renderMessages(state.messages, false);
+
+                    // Hide load more if all pages loaded
+                    if (state.loadedPages.size >= state.totalPages) {
+                        document.getElementById('load-more').style.display = 'none';
                     }
+                } catch (err) {
+                    console.error('Failed to load page for scroll:', err);
                 }
             }
 
