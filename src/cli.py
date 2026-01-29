@@ -7,10 +7,61 @@ Command-line interface for building hypertransparency documentation sites.
 
 import argparse
 import json
+import os
+import shutil
+import stat
 import sys
 from pathlib import Path
 from . import __version__
 from .builder import HypertransparencyBuilder
+
+
+def install_hook():
+    """Install the auto-rebuild hook for Claude Code."""
+    hook_script = Path(__file__).parent.parent / "templates" / "hooks" / "post-session.sh"
+    if not hook_script.exists():
+        print("Warning: Hook template not found, skipping hook installation")
+        return
+
+    # Install to ~/.local/bin/
+    local_bin = Path.home() / ".local" / "bin"
+    local_bin.mkdir(parents=True, exist_ok=True)
+    dest = local_bin / "hypertransparency-rebuild"
+    shutil.copy(hook_script, dest)
+    dest.chmod(dest.stat().st_mode | stat.S_IEXEC)
+
+    # Check/update Claude Code settings
+    claude_settings = Path.home() / ".claude" / "settings.json"
+    hook_cmd = str(dest)
+
+    if claude_settings.exists():
+        with open(claude_settings) as f:
+            settings = json.load(f)
+    else:
+        claude_settings.parent.mkdir(parents=True, exist_ok=True)
+        settings = {}
+
+    # Add hook if not present
+    if "hooks" not in settings:
+        settings["hooks"] = {}
+    if "PostToolUse" not in settings["hooks"]:
+        settings["hooks"]["PostToolUse"] = []
+
+    # Use PostToolUse with matcher for git commits (rebuilds after each commit)
+    hook_entry = {
+        "matcher": "Bash",
+        "hooks": [hook_cmd]
+    }
+
+    # Check if already installed
+    existing = [h for h in settings["hooks"]["PostToolUse"] if isinstance(h, dict) and h.get("hooks") == [hook_cmd]]
+    if not existing:
+        settings["hooks"]["PostToolUse"].append(hook_entry)
+        with open(claude_settings, "w") as f:
+            json.dump(settings, f, indent=2)
+        print(f"Installed auto-rebuild hook: {dest}")
+    else:
+        print("Auto-rebuild hook already installed")
 
 
 def main():
@@ -175,8 +226,18 @@ def cmd_init(args):
         json.dump(config, f, indent=2)
 
     print(f"Created config file: {config_file}")
-    print("\nEdit this file to customize your site, then run:")
-    print(f"  hypertransparency build {args.repo}")
+
+    # Install the auto-rebuild hook
+    install_hook()
+
+    # Run initial build
+    print("\nRunning initial build...")
+    from .builder import HypertransparencyBuilder
+    builder = HypertransparencyBuilder(str(repo_path))
+    builder.build(config["project"])
+
+    print("\nSetup complete! The docs/ folder will auto-rebuild after Claude Code sessions.")
+    print("Push to GitHub and enable GitHub Pages from the docs/ folder.")
 
 
 def cmd_serve(args):

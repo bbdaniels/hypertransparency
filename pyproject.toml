@@ -47,4 +47,4 @@ where = ["."]
 include = ["src*", "templates*"]
 
 [tool.setuptools.package-data]
-templates = ["*.html", "*.css", "*.js"]
+templates = ["*.html", "*.css", "*.js", "hooks/*.sh"]
