@@ -841,6 +841,7 @@
                 </div>
             </div>
             <div class="header-actions">
+                <a id="repo-link" class="header-btn" href="#" target="_blank" title="View Repository">&#x1F517;</a>
                 <button class="header-btn" onclick="toggleSearch()">&#x1F50D;</button>
                 <button class="header-btn" onclick="toggleSidebar()">&#x2630;</button>
             </div>
@@ -925,8 +926,15 @@
 
                 // Update page title and header from manifest
                 document.title = `${state.project.name} - Development Chat`;
-                document.getElementById('header-title').textContent = `Claude + Developer`;
-                document.getElementById('header-subtitle').textContent = state.project.name;
+                document.getElementById('header-title').textContent = state.project.name;
+                document.getElementById('header-subtitle').textContent = state.project.description || 'AI Development Documentation';
+
+                // Set repository link
+                if (state.project.repository) {
+                    document.getElementById('repo-link').href = state.project.repository;
+                } else {
+                    document.getElementById('repo-link').style.display = 'none';
+                }
 
                 // Load supporting data
                 const [commitsData, imagesData, imageVersionsData] = await Promise.all([
