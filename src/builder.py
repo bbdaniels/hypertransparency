@@ -421,8 +421,67 @@ class HypertransparencyBuilder:
                         "name": img.name,
                         "path": f"images/{img.name}",
                         "timestamp": datetime.fromtimestamp(stat.st_mtime).isoformat(),
-                        "fileSize": stat.st_size
+                        "fileSize": stat.st_size,
+                        "assignedMessageId": None  # Will be filled by compute_image_assignments
                     })
+
+        return images
+
+    def compute_image_assignments(self, images: List[dict], messages: List[dict]) -> List[dict]:
+        """
+        Assign each image to the nearest message that occurs BEFORE the image timestamp.
+        This is computed at build time so the frontend doesn't need to load all messages.
+
+        If an image timestamp is before all messages, assign it to the first message.
+        """
+        if not messages:
+            return images
+
+        # Parse message timestamps once
+        msg_times = []
+        for msg in messages:
+            try:
+                ts = msg["timestamp"].replace("Z", "").split(".")[0]
+                msg_time = datetime.fromisoformat(ts)
+                msg_times.append((msg, msg_time))
+            except:
+                continue
+
+        if not msg_times:
+            return images
+
+        # Sort messages by timestamp
+        msg_times.sort(key=lambda x: x[1])
+        first_msg = msg_times[0][0]
+
+        # Assign each image to nearest preceding message
+        for img in images:
+            try:
+                img_time = datetime.fromisoformat(img["timestamp"])
+            except:
+                # If we can't parse timestamp, assign to first message
+                img["assignedMessageId"] = first_msg["id"]
+                img["assignmentDiffSeconds"] = None
+                continue
+
+            # Find the closest message BEFORE (or at) this image's timestamp
+            closest_msg = None
+            closest_diff = None
+
+            for msg, msg_time in msg_times:
+                if msg_time <= img_time:
+                    diff = (img_time - msg_time).total_seconds()
+                    if closest_diff is None or diff < closest_diff:
+                        closest_diff = diff
+                        closest_msg = msg
+
+            if closest_msg:
+                img["assignedMessageId"] = closest_msg["id"]
+                img["assignmentDiffSeconds"] = closest_diff
+            else:
+                # Image is before all messages - assign to first message
+                img["assignedMessageId"] = first_msg["id"]
+                img["assignmentDiffSeconds"] = None
 
         return images
 
@@ -454,14 +513,23 @@ class HypertransparencyBuilder:
         index["terms"] = dict(index["terms"])
         return index
 
-    def paginate_messages(self, messages: List[dict]) -> List[dict]:
-        """Split messages into pages."""
+    def paginate_messages(self, messages: List[dict]) -> tuple:
+        """Split messages into pages and create message-to-page index.
+
+        Returns:
+            tuple: (pages list, message_page_index dict mapping msgId -> pageNumber)
+        """
         pages = []
+        message_page_index = {}  # msgId -> pageNumber
         page_size = self.config["messages_per_page"]
 
         for i in range(0, len(messages), page_size):
             page_num = i // page_size + 1
             page_messages = messages[i:i + page_size]
+
+            # Index each message to its page
+            for msg in page_messages:
+                message_page_index[msg["id"]] = page_num
 
             pages.append({
                 "version": "1.0",
@@ -472,7 +540,7 @@ class HypertransparencyBuilder:
                 "messages": page_messages
             })
 
-        return pages
+        return pages, message_page_index
 
     def generate_manifest(self, messages: List[dict], commits: List[dict],
                          images: List[dict], sessions: List[dict], project_config: dict) -> dict:
@@ -548,6 +616,11 @@ class HypertransparencyBuilder:
         images = self.get_images()
         print(f"Found {len(images)} images")
 
+        # Compute image-to-message assignments at build time
+        images = self.compute_image_assignments(images, all_messages)
+        assigned_count = sum(1 for img in images if img.get("assignedMessageId"))
+        print(f"Assigned {assigned_count} images to messages")
+
         # Versioned artifacts
         image_versions = self.extract_versioned_artifacts(commits)
         print(f"Tracked {len(image_versions)} images with version history")
@@ -557,8 +630,13 @@ class HypertransparencyBuilder:
         print(f"Search index: {len(search_index['terms'])} terms")
 
         # Pagination
-        pages = self.paginate_messages(all_messages)
+        pages, message_page_index = self.paginate_messages(all_messages)
         print(f"Paginated into {len(pages)} pages")
+
+        # Add page number to each image's assignment for parallel loading
+        for img in images:
+            if img.get("assignedMessageId"):
+                img["assignedMessagePage"] = message_page_index.get(img["assignedMessageId"])
 
         # Manifest
         manifest = self.generate_manifest(all_messages, commits, images, sessions, project_config)
