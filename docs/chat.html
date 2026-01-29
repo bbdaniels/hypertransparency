@@ -1129,15 +1129,13 @@
             // Parse message timestamp
             const msgTime = new Date(msgTimestamp).getTime();
 
-            // Find the most recent commit that changed this image BEFORE the message
-            // Versions are stored chronologically, so we find the last one before msgTime
+            // Find the most recent commit that changed this image BEFORE or AT the message time
+            // Versions are stored chronologically, so we find the last one at or before msgTime
             let bestVersion = null;
             for (const v of versions) {
-                // Parse commit timestamp (format: "2026-01-29 01:32:55 -0500")
-                // Convert "2026-01-29 01:32:55 -0500" to ISO format for parsing
-                const tsMatch = v.timestamp.match(/^(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})/);
-                if (!tsMatch) continue;
-                const commitTime = new Date(`${tsMatch[1]}T${tsMatch[2]}`).getTime();
+                // Parse commit timestamp (supports ISO format like "2026-01-28T14:01:30.000Z")
+                const commitTime = new Date(v.timestamp).getTime();
+                if (isNaN(commitTime)) continue;
                 if (commitTime <= msgTime) {
                     bestVersion = v;
                 }
@@ -1167,6 +1165,19 @@
 
                 try {
                     html = marked.parse(text);
+
+                    // Post-process: Replace markdown image paths with versioned paths
+                    if (msgTimestamp && html) {
+                        html = html.replace(/<img\s+([^>]*?)src="([^"]+)"([^>]*)>/gi, (match, before, src, after) => {
+                            // Extract image name from path
+                            const imgName = src.split('/').pop();
+                            const versionedPath = getVersionedImagePath(imgName, msgTimestamp);
+                            if (versionedPath !== src) {
+                                console.log(`Versioning image ${imgName}: ${src} -> ${versionedPath} for timestamp ${msgTimestamp}`);
+                            }
+                            return `<img ${before}src="${versionedPath}"${after}>`;
+                        });
+                    }
                 } catch (e) {
                     console.warn('Markdown parse error:', e);
                 }
