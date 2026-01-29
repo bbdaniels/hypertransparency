@@ -1274,10 +1274,9 @@
             // Add image versions as separate entries (shows when each image changed)
             Object.entries(state.imageVersions).forEach(([imageName, versions]) => {
                 versions.forEach((v, idx) => {
-                    // Parse commit timestamp
-                    const tsMatch = v.timestamp.match(/^(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})/);
-                    if (!tsMatch) return;
-                    const versionTime = new Date(`${tsMatch[1]}T${tsMatch[2]}`).getTime();
+                    // Parse commit timestamp (supports ISO format)
+                    const versionTime = new Date(v.timestamp).getTime();
+                    if (isNaN(versionTime)) return;
 
                     const label = imageName.replace('.png', '').replace(/_/g, ' ');
                     const versionLabel = versions.length > 1 ? ` (v${idx + 1})` : '';
