@@ -978,8 +978,31 @@
                 // Render sidebar
                 renderCommits();
 
-                // Load first page
-                await loadMoreMessages();
+                // Load ALL messages for correct image-to-message assignment
+                // Images are assigned to the nearest message before their timestamp,
+                // so we need all messages loaded to compute this correctly
+                const allMessages = [];
+                for (let p = 1; p <= state.totalPages; p++) {
+                    const pageNum = String(p).padStart(3, '0');
+                    const data = await fetch(`data/messages-${pageNum}.json`).then(r => r.json());
+                    allMessages.push(...data.messages);
+                }
+                state.messages = allMessages;
+                state.currentPage = state.totalPages;
+
+                // Compute image assignments with full message set
+                computeImageAssignments();
+
+                // Render all messages and minimap
+                renderMessages(state.messages, false);
+                renderMinimap();
+                document.getElementById('load-more').style.display = 'none';
+
+                // Scroll to bottom to show recent messages
+                setTimeout(() => {
+                    const chat = document.getElementById('chat');
+                    chat.scrollTop = chat.scrollHeight;
+                }, 100);
 
             } catch (err) {
                 console.error('Failed to load:', err);
