@@ -1382,11 +1382,7 @@
             let commits = [];
 
             // Build exhibits from state.images using file mtime for accurate timestamps
-            // Only show images that have a valid message assignment (created during conversation)
             state.images.forEach(img => {
-                // Skip images without assignments (legacy files predating conversation)
-                if (!img.assignedMessageId) return;
-
                 const imgTime = new Date(img.timestamp).getTime();
                 if (isNaN(imgTime)) return;
 
@@ -1452,7 +1448,7 @@
                         </div>
                         <div style="font-size:10px;margin-top:1px;">${escapeHtml(img.imageName ? img.imageName.replace('.png', '').replace(/_/g, ' ') : img.label)}${versionBadge}</div>
                         <div style="display:flex;gap:6px;margin-top:2px;font-size:9px;">
-                            <a href="#" onclick="event.stopPropagation();scrollToMessageById('${img.assignedMessageId}', ${img.assignedMessagePage});return false;" style="color:#007aff;">→ Msg</a>
+                            ${img.assignedMessageId ? `<a href="#" onclick="event.stopPropagation();scrollToMessageById('${img.assignedMessageId}', ${img.assignedMessagePage});return false;" style="color:#007aff;">→ Msg</a>` : ''}
                             <a href="#" onclick="event.stopPropagation();openLightbox('${img.url}');return false;" style="color:#ff9500;">View</a>
                         </div>
                     </div>`;
