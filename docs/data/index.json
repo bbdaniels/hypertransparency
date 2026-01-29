@@ -1,19 +1,19 @@
 {
   "version": "1.0",
   "projectName": "Sales Analysis Demo",
-  "generatedAt": "2026-01-28T14:05:00",
+  "generatedAt": "2026-01-28T14:10:00",
   "stats": {
-    "totalMessages": 9,
-    "totalCommits": 3,
-    "totalImages": 3,
-    "totalArtifacts": 3
+    "totalMessages": 14,
+    "totalCommits": 6,
+    "totalImages": 6,
+    "totalArtifacts": 6
   },
   "messageFiles": [
     {
       "file": "messages-001.json",
       "startIndex": 0,
-      "endIndex": 8,
-      "count": 9
+      "endIndex": 13,
+      "count": 14
     }
   ]
 }

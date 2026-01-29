@@ -3,7 +3,7 @@
   "page": 1,
   "totalPages": 1,
   "startIndex": 0,
-  "endIndex": 9,
+  "endIndex": 14,
   "messages": [
     {
       "id": "msg_demo001",
@@ -84,7 +84,7 @@
       "timestamp": "2026-01-28T14:01:30.000Z",
       "sessionId": "demo-session",
       "content": {
-        "text": "I've created the first visualization showing monthly revenue trends.\n\n![Revenue Trends](images/revenue_trends.svg)\n\n**Key findings:**\n- 2025 revenue consistently outperforms 2024\n- Strong growth trajectory in both years\n- Q4 shows acceleration in 2025",
+        "text": "I've created the first visualization showing monthly revenue trends.\n\n![Revenue Trends](images/revenue_trends.svg)\n\n**Initial draft** - showing 2024 data. I'll add 2025 comparison in the next revision.",
         "textPreview": "I've created the first visualization showing monthly revenue trends...",
         "hasThinking": true,
         "thinkingPreview": "Creating a line chart comparing 2024 vs 2025 monthly revenue. Using blue for 2024 and green for 2025 to distinguish the years clearly. The chart shows cumulative monthly growth patterns...",
@@ -106,7 +106,7 @@
         }
       ],
       "relatedCommits": ["commit001"],
-      "searchText": "revenue trends visualization 2024 2025 growth q4"
+      "searchText": "revenue trends visualization 2024 draft"
     },
     {
       "id": "msg_demo006",
@@ -115,7 +115,7 @@
       "timestamp": "2026-01-28T14:02:00.000Z",
       "sessionId": "demo-session",
       "content": {
-        "text": "Here's the category breakdown showing sales by product.\n\n![Category Breakdown](images/category_breakdown.svg)\n\n**Key findings:**\n- Product A leads at $65K\n- Services segment strong at $60K\n- Product D underperforming at $28K - may need attention",
+        "text": "Here's the category breakdown showing sales by product.\n\n![Category Breakdown](images/category_breakdown.svg)\n\n**Initial draft** - basic bars. Will add sorting and colors in revision.",
         "textPreview": "Here's the category breakdown showing sales by product...",
         "hasThinking": false,
         "toolCalls": [
@@ -136,7 +136,7 @@
         }
       ],
       "relatedCommits": ["commit002"],
-      "searchText": "category breakdown sales product services underperforming"
+      "searchText": "category breakdown sales product draft"
     },
     {
       "id": "msg_demo007",
@@ -145,10 +145,10 @@
       "timestamp": "2026-01-28T14:02:30.000Z",
       "sessionId": "demo-session",
       "content": {
-        "text": "Finally, here's the marketing ROI analysis.\n\n![Marketing ROI](images/marketing_roi.svg)\n\n**Key findings:**\n- Strong positive correlation (R² = 0.82) between marketing spend and new customers\n- Each $1K in marketing spend generates ~0.82 new customers\n- Baseline of ~8.5 customers even with zero spend (organic growth)\n\nThis suggests marketing investments are effective and scalable.",
-        "textPreview": "Finally, here's the marketing ROI analysis...",
+        "text": "Finally, here's the marketing data scatter plot.\n\n![Marketing ROI](images/marketing_roi.svg)\n\n**Initial draft** - scatter points only. Will add regression trend line in revision.",
+        "textPreview": "Finally, here's the marketing data scatter plot...",
         "hasThinking": true,
-        "thinkingPreview": "Creating a scatter plot with regression line to show the relationship between marketing spend and customer acquisition. The trend line equation y = 0.82x + 8.5 indicates strong ROI...",
+        "thinkingPreview": "Creating a scatter plot to show the relationship between marketing spend and customer acquisition...",
         "toolCalls": [
           {
             "id": "tool_004",
@@ -167,13 +167,137 @@
         }
       ],
       "relatedCommits": ["commit003"],
-      "searchText": "marketing roi analysis correlation customers spend regression"
+      "searchText": "marketing roi scatter plot draft"
     },
     {
       "id": "msg_demo008",
       "uuid": "demo008",
       "role": "user",
       "timestamp": "2026-01-28T14:03:00.000Z",
+      "sessionId": "demo-session",
+      "content": {
+        "text": "Good start! Can you improve these? Add 2025 to the trends, sort the categories by value, and add a trend line to the ROI chart.",
+        "textPreview": "Good start! Can you improve these?",
+        "hasThinking": false,
+        "toolCalls": []
+      },
+      "artifacts": [],
+      "relatedCommits": [],
+      "searchText": "improve add 2025 sort categories trend line"
+    },
+    {
+      "id": "msg_demo009",
+      "uuid": "demo009",
+      "role": "assistant",
+      "timestamp": "2026-01-28T14:03:30.000Z",
+      "sessionId": "demo-session",
+      "content": {
+        "text": "Great feedback! Let me update all three charts with your suggestions.",
+        "textPreview": "Great feedback! Let me update all three charts with your suggestions.",
+        "hasThinking": true,
+        "thinkingPreview": "The user wants three improvements: 1) Add 2025 data to revenue trends, 2) Sort category bars by value descending, 3) Add regression line to marketing ROI. I'll update each chart...",
+        "toolCalls": []
+      },
+      "artifacts": [],
+      "relatedCommits": [],
+      "searchText": "update charts improvements"
+    },
+    {
+      "id": "msg_demo011",
+      "uuid": "demo011",
+      "role": "assistant",
+      "timestamp": "2026-01-28T14:03:55.000Z",
+      "sessionId": "demo-session",
+      "content": {
+        "text": "**Updated revenue trends** with 2025 data added:\n\n![Revenue Trends](images/revenue_trends.svg)\n\n**Key findings:**\n- 2025 revenue consistently outperforms 2024\n- Strong growth trajectory in both years\n- Q4 shows acceleration in 2025",
+        "textPreview": "Updated revenue trends with 2025 data added...",
+        "hasThinking": false,
+        "toolCalls": [
+          {
+            "id": "tool_005",
+            "name": "Edit",
+            "input": {"file_path": "/project/images/revenue_trends.svg"},
+            "inputPreview": "Edit: images/revenue_trends.svg"
+          }
+        ]
+      },
+      "artifacts": [
+        {
+          "type": "image",
+          "id": "img_revenue_trends",
+          "name": "revenue_trends.svg",
+          "path": "images/revenue_trends.svg"
+        }
+      ],
+      "relatedCommits": ["commit004"],
+      "searchText": "updated revenue trends 2025 data growth q4"
+    },
+    {
+      "id": "msg_demo012",
+      "uuid": "demo012",
+      "role": "assistant",
+      "timestamp": "2026-01-28T14:04:25.000Z",
+      "sessionId": "demo-session",
+      "content": {
+        "text": "**Updated category breakdown** - sorted by value with distinct colors:\n\n![Category Breakdown](images/category_breakdown.svg)\n\n**Key findings:**\n- Product A leads at $65K\n- Services segment strong at $60K\n- Product D underperforming at $28K - may need attention",
+        "textPreview": "Updated category breakdown - sorted by value with distinct colors...",
+        "hasThinking": false,
+        "toolCalls": [
+          {
+            "id": "tool_006",
+            "name": "Edit",
+            "input": {"file_path": "/project/images/category_breakdown.svg"},
+            "inputPreview": "Edit: images/category_breakdown.svg"
+          }
+        ]
+      },
+      "artifacts": [
+        {
+          "type": "image",
+          "id": "img_category_breakdown",
+          "name": "category_breakdown.svg",
+          "path": "images/category_breakdown.svg"
+        }
+      ],
+      "relatedCommits": ["commit005"],
+      "searchText": "updated category breakdown sorted colors product services"
+    },
+    {
+      "id": "msg_demo013",
+      "uuid": "demo013",
+      "role": "assistant",
+      "timestamp": "2026-01-28T14:04:55.000Z",
+      "sessionId": "demo-session",
+      "content": {
+        "text": "**Updated marketing ROI** with regression trend line:\n\n![Marketing ROI](images/marketing_roi.svg)\n\n**Key findings:**\n- Strong positive correlation (R² = 0.82) between marketing spend and new customers\n- Each $1K in marketing spend generates ~0.82 new customers\n- Baseline of ~8.5 customers even with zero spend (organic growth)\n\nThis suggests marketing investments are effective and scalable.",
+        "textPreview": "Updated marketing ROI with regression trend line...",
+        "hasThinking": true,
+        "thinkingPreview": "Adding the regression line to show the trend. The equation y = 0.82x + 8.5 indicates strong ROI. The R² of 0.82 shows good fit...",
+        "toolCalls": [
+          {
+            "id": "tool_007",
+            "name": "Edit",
+            "input": {"file_path": "/project/images/marketing_roi.svg"},
+            "inputPreview": "Edit: images/marketing_roi.svg"
+          }
+        ]
+      },
+      "artifacts": [
+        {
+          "type": "image",
+          "id": "img_marketing_roi",
+          "name": "marketing_roi.svg",
+          "path": "images/marketing_roi.svg"
+        }
+      ],
+      "relatedCommits": ["commit006"],
+      "searchText": "updated marketing roi regression trend line correlation"
+    },
+    {
+      "id": "msg_demo014",
+      "uuid": "demo014",
+      "role": "user",
+      "timestamp": "2026-01-28T14:05:30.000Z",
       "sessionId": "demo-session",
       "content": {
         "text": "These look great! Can you summarize the key insights?",
@@ -186,10 +310,10 @@
       "searchText": "summarize key insights"
     },
     {
-      "id": "msg_demo009",
-      "uuid": "demo009",
+      "id": "msg_demo015",
+      "uuid": "demo015",
       "role": "assistant",
-      "timestamp": "2026-01-28T14:03:30.000Z",
+      "timestamp": "2026-01-28T14:06:00.000Z",
       "sessionId": "demo-session",
       "content": {
         "text": "## Sales Analysis Summary\n\n### Revenue Growth\n- 2025 YTD revenue up **23%** vs 2024\n- Strongest growth in Q3-Q4\n- Trajectory suggests hitting $200K+ by year end\n\n### Product Performance\n- **Top performers**: Product A ($65K), Services ($60K)\n- **Needs attention**: Product D ($28K) - consider pricing or marketing review\n- Services growing fastest (+15% QoQ)\n\n### Marketing Effectiveness\n- **ROI**: $1 marketing spend → 0.82 new customers\n- **Organic baseline**: ~8.5 customers/month without marketing\n- **Recommendation**: Increase marketing budget - strong scalability shown\n\n### Action Items\n1. Investigate Product D underperformance\n2. Allocate more budget to marketing\n3. Continue Services expansion",

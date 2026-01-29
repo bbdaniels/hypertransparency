@@ -2,24 +2,45 @@
   "version": "1.0",
   "images": [
     {
+      "id": "img_revenue_trends_v1",
+      "name": "revenue_trends_v1.svg",
+      "path": "images/revenue_trends_v1.svg",
+      "timestamp": "2026-01-28T14:01:35",
+      "fileSize": 3200
+    },
+    {
       "id": "img_revenue_trends",
       "name": "revenue_trends.svg",
       "path": "images/revenue_trends.svg",
-      "timestamp": "2026-01-28T14:01:35",
+      "timestamp": "2026-01-28T14:04:00",
       "fileSize": 3500
+    },
+    {
+      "id": "img_category_breakdown_v1",
+      "name": "category_breakdown_v1.svg",
+      "path": "images/category_breakdown_v1.svg",
+      "timestamp": "2026-01-28T14:02:05",
+      "fileSize": 2500
     },
     {
       "id": "img_category_breakdown",
       "name": "category_breakdown.svg",
       "path": "images/category_breakdown.svg",
-      "timestamp": "2026-01-28T14:02:05",
+      "timestamp": "2026-01-28T14:04:30",
       "fileSize": 2800
+    },
+    {
+      "id": "img_marketing_roi_v1",
+      "name": "marketing_roi_v1.svg",
+      "path": "images/marketing_roi_v1.svg",
+      "timestamp": "2026-01-28T14:02:35",
+      "fileSize": 2900
     },
     {
       "id": "img_marketing_roi",
       "name": "marketing_roi.svg",
       "path": "images/marketing_roi.svg",
-      "timestamp": "2026-01-28T14:02:35",
+      "timestamp": "2026-01-28T14:05:00",
       "fileSize": 3200
     }
   ]

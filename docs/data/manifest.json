@@ -2,18 +2,18 @@
   "version": "1.0",
   "project": {
     "name": "Sales Analysis Demo",
-    "description": "AI-assisted sales data analysis with visualizations",
+    "description": "AI-assisted sales data analysis with iterative chart revisions",
     "repository": "https://github.com/bbdaniels/hypertransparency",
     "branch": "main"
   },
-  "generated": "2026-01-28T14:05:00.000000",
+  "generated": "2026-01-28T14:10:00.000000",
   "stats": {
-    "totalMessages": 9,
-    "userMessages": 3,
-    "assistantMessages": 6,
-    "totalArtifacts": 3,
-    "totalCommits": 3,
-    "totalImages": 3,
+    "totalMessages": 14,
+    "userMessages": 4,
+    "assistantMessages": 10,
+    "totalArtifacts": 6,
+    "totalCommits": 6,
+    "totalImages": 6,
     "sessions": 1
   },
   "pagination": {
