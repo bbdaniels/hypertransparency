@@ -1,4 +1,40 @@
 {
-  "version": "1.0",
-  "imageVersions": {}
+  "imageVersions": {
+    "revenue_trends.svg": [
+      {
+        "commitHash": "commit001",
+        "timestamp": "2026-01-28T14:01:30.000Z",
+        "localPath": "images/revenue_trends_v1.svg"
+      },
+      {
+        "commitHash": "commit004",
+        "timestamp": "2026-01-28T14:03:55.000Z",
+        "localPath": "images/revenue_trends.svg"
+      }
+    ],
+    "category_breakdown.svg": [
+      {
+        "commitHash": "commit002",
+        "timestamp": "2026-01-28T14:02:00.000Z",
+        "localPath": "images/category_breakdown_v1.svg"
+      },
+      {
+        "commitHash": "commit005",
+        "timestamp": "2026-01-28T14:04:25.000Z",
+        "localPath": "images/category_breakdown.svg"
+      }
+    ],
+    "marketing_roi.svg": [
+      {
+        "commitHash": "commit003",
+        "timestamp": "2026-01-28T14:02:30.000Z",
+        "localPath": "images/marketing_roi_v1.svg"
+      },
+      {
+        "commitHash": "commit006",
+        "timestamp": "2026-01-28T14:04:55.000Z",
+        "localPath": "images/marketing_roi.svg"
+      }
+    ]
+  }
 }

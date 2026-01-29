@@ -1,27 +1,27 @@
 {
   "version": "1.0",
   "project": {
-    "name": "Estonia QBS",
-    "description": "Quality Bonus System Analysis",
-    "repository": "https://github.com/bbdaniels/estonia-qbs",
+    "name": "Sales Analysis Demo",
+    "description": "AI-assisted sales data analysis with iterative chart revisions",
+    "repository": "https://github.com/bbdaniels/hypertransparency",
     "branch": "main"
   },
-  "generated": "2026-01-29T17:20:11.923846",
+  "generated": "2026-01-28T14:10:00.000000",
   "stats": {
-    "totalMessages": 0,
-    "userMessages": 0,
-    "assistantMessages": 0,
-    "totalArtifacts": 0,
-    "totalCommits": 16,
-    "totalImages": 0,
-    "sessions": 0
+    "totalMessages": 14,
+    "userMessages": 4,
+    "assistantMessages": 10,
+    "totalArtifacts": 6,
+    "totalCommits": 6,
+    "totalImages": 6,
+    "sessions": 1
   },
   "pagination": {
     "messagesPerPage": 100,
-    "totalPages": 0
+    "totalPages": 1
   },
   "sources": {
-    "sessions": [],
-    "lastModified": ""
+    "sessions": ["demo-session"],
+    "lastModified": "2026-01-28T14:05:00.000000"
   }
 }
