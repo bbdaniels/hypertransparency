@@ -1401,7 +1401,9 @@
                     dateStr: formatDate(imgTime),
                     isVersion: hasVersions,
                     versionNum: hasVersions ? versions.length : null,
-                    totalVersions: hasVersions ? versions.length : null
+                    totalVersions: hasVersions ? versions.length : null,
+                    assignedMessageId: img.assignedMessageId,
+                    assignedMessagePage: img.assignedMessagePage
                 });
             });
 
@@ -1446,7 +1448,7 @@
                         </div>
                         <div style="font-size:10px;margin-top:1px;">${escapeHtml(img.imageName ? img.imageName.replace('.png', '').replace(/_/g, ' ') : img.label)}${versionBadge}</div>
                         <div style="display:flex;gap:6px;margin-top:2px;font-size:9px;">
-                            <a href="#" onclick="event.stopPropagation();scrollToMessageByTimestamp(${img.timestamp});return false;" style="color:#007aff;">→ Msg</a>
+                            <a href="#" onclick="event.stopPropagation();scrollToMessageById('${img.assignedMessageId}', ${img.assignedMessagePage});return false;" style="color:#007aff;">→ Msg</a>
                             <a href="#" onclick="event.stopPropagation();openLightbox('${img.url}');return false;" style="color:#ff9500;">View</a>
                         </div>
                     </div>`;
@@ -1512,6 +1514,31 @@
                 closestEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 closestEl.style.outline = '2px solid #007aff';
                 setTimeout(() => { closestEl.style.outline = ''; }, 2000);
+            }
+        }
+
+        async function scrollToMessageById(msgId, msgPage) {
+            if (!msgId) return;
+
+            // If page is specified and not already loaded, load it
+            if (msgPage !== undefined && msgPage !== null) {
+                // Check if page is already loaded by looking for any message from that page
+                const existingMsg = document.querySelector(`.msg-row[data-msg-id="${msgId}"]`);
+                if (!existingMsg) {
+                    // Need to load the page - load pages until we have the target
+                    while (state.currentPage < msgPage && state.currentPage < state.totalPages) {
+                        await loadMoreMessages();
+                    }
+                }
+            }
+
+            // Find the message element by ID
+            const msgEl = document.querySelector(`.msg-row[data-msg-id="${msgId}"]`);
+
+            if (msgEl) {
+                msgEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                msgEl.style.outline = '2px solid #007aff';
+                setTimeout(() => { msgEl.style.outline = ''; }, 2000);
             }
         }
 
