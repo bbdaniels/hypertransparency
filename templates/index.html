@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypertransparency</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+        .container {
+            text-align: center;
+            padding: 3rem;
+            max-width: 600px;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #a855f7, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .tagline {
+            font-size: 1.2rem;
+            color: #8e8e93;
+            margin-bottom: 2rem;
+        }
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .stat {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #a855f7;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            color: #8e8e93;
+        }
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, #a855f7, #7c3aed);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .description {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            color: #aaa;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .powered {
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: #666;
+        }
+        .powered a {
+            color: #a855f7;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="project-name">Loading...</h1>
+        <p class="tagline">AI Development Documentation</p>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value" id="stat-messages">-</div>
+                <div class="stat-label">Messages</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="stat-commits">-</div>
+                <div class="stat-label">Commits</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="stat-images">-</div>
+                <div class="stat-label">Visualizations</div>
+            </div>
+        </div>
+
+        <a href="chat.html" class="btn">View Development Chat</a>
+
+        <div class="description" id="description">
+            This site documents the complete AI-assisted development process, showing every conversation,
+            decision, and iteration between developer and AI assistant.
+        </div>
+
+        <p class="powered">
+            Powered by <a href="https://github.com/bbdaniels/hypertransparency" target="_blank">Hypertransparency</a>
+        </p>
+    </div>
+
+    <script>
+        async function init() {
+            try {
+                const manifest = await fetch('data/manifest.json').then(r => r.json());
+
+                document.getElementById('project-name').textContent = manifest.project.name;
+                document.title = manifest.project.name + ' - Hypertransparency';
+
+                if (manifest.project.description) {
+                    document.getElementById('description').textContent = manifest.project.description;
+                }
+
+                document.getElementById('stat-messages').textContent = manifest.stats.totalMessages;
+                document.getElementById('stat-commits').textContent = manifest.stats.totalCommits;
+                document.getElementById('stat-images').textContent = manifest.stats.totalImages;
+            } catch (e) {
+                console.error('Failed to load manifest:', e);
+                document.getElementById('project-name').textContent = 'Hypertransparency';
+            }
+        }
+        init();
+    </script>
+</body>
+</html>

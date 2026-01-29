@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hypertransparency"
+version = "0.1.0"
+description = "Generate beautiful documentation sites from Claude Code conversations"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Benjamin Daniels", email = "bbdaniels@gmail.com"}
+]
+keywords = ["claude", "ai", "documentation", "transparency", "llm"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Documentation",
+    "Topic :: Software Development :: Documentation",
+]
+requires-python = ">=3.8"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest", "black", "mypy"]
+
+[project.scripts]
+hypertransparency = "src.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/bbdaniels/hypertransparency"
+Documentation = "https://github.com/bbdaniels/hypertransparency#readme"
+Repository = "https://github.com/bbdaniels/hypertransparency"
+Issues = "https://github.com/bbdaniels/hypertransparency/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*", "templates*"]
+
+[tool.setuptools.package-data]
+templates = ["*.html", "*.css", "*.js"]
