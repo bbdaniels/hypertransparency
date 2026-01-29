@@ -1382,7 +1382,11 @@
             let commits = [];
 
             // Build exhibits from state.images using file mtime for accurate timestamps
+            // Only show images that have a valid message assignment (created during conversation)
             state.images.forEach(img => {
+                // Skip images without assignments (legacy files predating conversation)
+                if (!img.assignedMessageId) return;
+
                 const imgTime = new Date(img.timestamp).getTime();
                 if (isNaN(imgTime)) return;
 

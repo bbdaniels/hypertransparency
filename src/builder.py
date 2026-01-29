@@ -461,8 +461,8 @@ class HypertransparencyBuilder:
             try:
                 img_time = datetime.fromisoformat(img["timestamp"])
             except:
-                # If we can't parse timestamp, assign to first assistant message
-                img["assignedMessageId"] = first_assistant_msg["id"]
+                # If we can't parse timestamp, don't assign
+                img["assignedMessageId"] = None
                 img["assignmentDiffSeconds"] = None
                 continue
 
@@ -481,8 +481,9 @@ class HypertransparencyBuilder:
                 img["assignedMessageId"] = closest_msg["id"]
                 img["assignmentDiffSeconds"] = closest_diff
             else:
-                # Image is before all assistant messages - assign to first assistant message
-                img["assignedMessageId"] = first_assistant_msg["id"]
+                # Image predates all assistant messages - don't assign it
+                # (it's probably a legacy file, not created during the conversation)
+                img["assignedMessageId"] = None
                 img["assignmentDiffSeconds"] = None
 
         return images
