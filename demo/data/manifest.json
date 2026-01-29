@@ -1,0 +1,27 @@
+{
+  "version": "1.0",
+  "project": {
+    "name": "Hypertransparency Demo",
+    "description": "Example documentation site showing AI-assisted development conversations",
+    "repository": "https://github.com/bbdaniels/hypertransparency",
+    "branch": "main"
+  },
+  "generated": "2026-01-29T03:00:00.000000",
+  "stats": {
+    "totalMessages": 5,
+    "userMessages": 2,
+    "assistantMessages": 3,
+    "totalArtifacts": 0,
+    "totalCommits": 1,
+    "totalImages": 1,
+    "sessions": 1
+  },
+  "pagination": {
+    "messagesPerPage": 100,
+    "totalPages": 1
+  },
+  "sources": {
+    "sessions": ["demo-session"],
+    "lastModified": "2026-01-29T03:00:00.000000"
+  }
+}

@@ -44,6 +44,5 @@ htmlcov/
 *.log
 .DS_Store
 
-# Demo output (generated)
-demo/data/
-demo/images/
+# Output directories (when used in other projects)
+# Note: demo/data/ is NOT ignored - it's needed for GitHub Pages demo

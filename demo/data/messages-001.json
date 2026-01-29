@@ -1,0 +1,97 @@
+{
+  "version": "1.0",
+  "page": 1,
+  "totalPages": 1,
+  "startIndex": 0,
+  "endIndex": 5,
+  "messages": [
+    {
+      "id": "msg_demo001",
+      "uuid": "demo001",
+      "role": "user",
+      "timestamp": "2026-01-29T02:00:00.000Z",
+      "sessionId": "demo-session",
+      "content": {
+        "text": "Help me set up hypertransparency for my project.",
+        "textPreview": "Help me set up hypertransparency for my project.",
+        "hasThinking": false,
+        "toolCalls": []
+      },
+      "artifacts": [],
+      "relatedCommits": [],
+      "searchText": "help me set up hypertransparency for my project"
+    },
+    {
+      "id": "msg_demo002",
+      "uuid": "demo002",
+      "role": "assistant",
+      "timestamp": "2026-01-29T02:00:05.000Z",
+      "sessionId": "demo-session",
+      "content": {
+        "text": "I'll help you set up hypertransparency to document your AI-assisted development process.\n\n**Step 1: Install**\n\n```bash\npip install git+https://github.com/bbdaniels/hypertransparency.git\n```\n\n**Step 2: Initialize**\n\n```bash\ncd /path/to/your/repo\nhypertransparency init\n```\n\nThis creates a `.hypertransparency.json` config file.",
+        "textPreview": "I'll help you set up hypertransparency to document your AI-assisted development process...",
+        "hasThinking": true,
+        "thinkingPreview": "The user wants to set up hypertransparency. I should walk them through the installation and initialization process...",
+        "toolCalls": []
+      },
+      "artifacts": [],
+      "relatedCommits": [],
+      "searchText": "help you set up hypertransparency pip install initialization"
+    },
+    {
+      "id": "msg_demo003",
+      "uuid": "demo003",
+      "role": "user",
+      "timestamp": "2026-01-29T02:01:00.000Z",
+      "sessionId": "demo-session",
+      "content": {
+        "text": "Great! Now build the site.",
+        "textPreview": "Great! Now build the site.",
+        "hasThinking": false,
+        "toolCalls": []
+      },
+      "artifacts": [],
+      "relatedCommits": [],
+      "searchText": "great now build the site"
+    },
+    {
+      "id": "msg_demo004",
+      "uuid": "demo004",
+      "role": "assistant",
+      "timestamp": "2026-01-29T02:01:05.000Z",
+      "sessionId": "demo-session",
+      "content": {
+        "text": "Building the documentation site...\n\n```bash\nhypertransparency build\n```\n\nThe site has been generated in the `docs/` folder. You can:\n\n1. **Preview locally:** `hypertransparency serve`\n2. **Deploy to GitHub Pages:** Push the `docs/` folder to your repo",
+        "textPreview": "Building the documentation site...",
+        "hasThinking": false,
+        "toolCalls": [
+          {
+            "id": "tool_001",
+            "name": "Bash",
+            "input": {"command": "hypertransparency build"},
+            "inputPreview": "Run: hypertransparency build"
+          }
+        ]
+      },
+      "artifacts": [],
+      "relatedCommits": ["abc1234"],
+      "searchText": "building documentation site hypertransparency build docs folder"
+    },
+    {
+      "id": "msg_demo005",
+      "uuid": "demo005",
+      "role": "user",
+      "timestamp": "2026-01-29T02:02:00.000Z",
+      "sessionId": "demo-session",
+      "content": {
+        "text": "Perfect! This is exactly what I needed.",
+        "textPreview": "Perfect! This is exactly what I needed.",
+        "hasThinking": false,
+        "toolCalls": []
+      },
+      "artifacts": [],
+      "relatedCommits": [],
+      "searchText": "perfect this is exactly what i needed"
+    }
+  ]
+}

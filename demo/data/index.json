@@ -1,0 +1,19 @@
+{
+  "version": "1.0",
+  "projectName": "Hypertransparency Demo",
+  "generatedAt": "2026-01-29T02:30:00",
+  "stats": {
+    "totalMessages": 5,
+    "totalCommits": 1,
+    "totalImages": 1,
+    "totalArtifacts": 0
+  },
+  "messageFiles": [
+    {
+      "file": "messages-001.json",
+      "startIndex": 0,
+      "endIndex": 4,
+      "count": 5
+    }
+  ]
+}
