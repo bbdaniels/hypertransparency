@@ -1115,7 +1115,7 @@
             });
         }
 
-        // Pre-compute image assignments: each image goes to its closest message
+        // Pre-compute image assignments: each image goes to the nearest message before it
         function computeImageAssignments() {
             state.imageAssignments = {};  // msgId -> [images]
 
@@ -1126,11 +1126,13 @@
 
                 state.messages.forEach(msg => {
                     const msgTime = new Date(msg.timestamp).getTime();
-                    const diff = Math.abs(imgTime - msgTime);
-                    // Only consider messages within 5 minutes
-                    if (diff <= 5 * 60 * 1000 && diff < closestDiff) {
-                        closestDiff = diff;
-                        closestMsg = msg;
+                    // Only consider messages that occur BEFORE the image was created
+                    if (msgTime <= imgTime) {
+                        const diff = imgTime - msgTime;
+                        if (diff < closestDiff) {
+                            closestDiff = diff;
+                            closestMsg = msg;
+                        }
                     }
                 });
 
