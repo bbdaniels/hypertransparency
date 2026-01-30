@@ -382,6 +382,82 @@
             text-align: right;
         }
 
+        /* Commit blocks - inline in message stream */
+        .commit-block {
+            margin: 16px 20px;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, rgba(52, 199, 89, 0.08), rgba(52, 199, 89, 0.04));
+            border: 1px solid rgba(52, 199, 89, 0.2);
+            border-radius: 12px;
+            border-left: 3px solid #34c759;
+        }
+
+        .commit-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--meta-text);
+            margin-bottom: 6px;
+        }
+
+        .commit-icon {
+            font-size: 14px;
+        }
+
+        .commit-hash {
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 11px;
+            background: rgba(52, 199, 89, 0.15);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #34c759;
+        }
+
+        .commit-time {
+            color: var(--meta-text);
+            font-size: 11px;
+        }
+
+        .commit-link {
+            margin-left: auto;
+            color: #34c759;
+            text-decoration: none;
+            font-size: 11px;
+        }
+
+        .commit-link:hover {
+            text-decoration: underline;
+        }
+
+        .commit-message {
+            font-size: 13px;
+            color: var(--assistant-text);
+            line-height: 1.4;
+        }
+
+        .commit-images {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(52, 199, 89, 0.15);
+        }
+
+        .commit-images img {
+            max-height: 80px;
+            max-width: 120px;
+            border-radius: 6px;
+            border: 1px solid rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .commit-images img:hover {
+            transform: scale(1.05);
+        }
+
         /* Tool/Action indicator */
         .action-chip {
             display: inline-flex;
@@ -930,7 +1006,6 @@
             currentPage: 0,
             totalPages: 0,
             loading: false,
-            imageAssignments: {},  // msgId -> [images] - pre-computed assignments
             project: {
                 name: 'AI Development',
                 description: '',
@@ -969,18 +1044,6 @@
                 state.commits = commitsData.commits || [];
                 state.images = imagesData.images || [];
                 state.imageVersions = imageVersionsData.imageVersions || {};
-
-                // Build image assignments from pre-computed data (computed at build time)
-                // Each image has an assignedMessageId field
-                state.imageAssignments = {};
-                state.images.forEach(img => {
-                    if (img.assignedMessageId) {
-                        if (!state.imageAssignments[img.assignedMessageId]) {
-                            state.imageAssignments[img.assignedMessageId] = [];
-                        }
-                        state.imageAssignments[img.assignedMessageId].push(img);
-                    }
-                });
 
                 // Update stats
                 document.getElementById('stat-messages').textContent = manifest.stats.totalMessages;
@@ -1122,91 +1185,127 @@
                 container.innerHTML = '';
             }
 
-            let lastRole = null;
-            let lastDate = null;
-
-            // Filter out empty messages only (IDE tags are stripped at build time)
+            // Filter out empty messages
             const visibleMessages = messages.filter(msg => {
                 const text = msg.content.text || msg.content.textPreview || '';
                 if (text.trim().length === 0) return false;
-                // Filter specific non-content messages
                 if (text === '[Request interrupted by user]') return false;
                 return true;
             });
 
-            // Images are shown in the minimap timeline only (not inline)
-            // because file timestamps don't reliably match message creation times
+            // Build a map of commit hash -> changed images
+            const commitImages = {};
+            Object.entries(state.imageVersions).forEach(([imageName, versions]) => {
+                versions.forEach(ver => {
+                    if (!commitImages[ver.commitHash]) {
+                        commitImages[ver.commitHash] = [];
+                    }
+                    commitImages[ver.commitHash].push({
+                        name: imageName,
+                        path: ver.localPath
+                    });
+                });
+            });
 
-            visibleMessages.forEach((msg, i) => {
-                const msgDate = new Date(msg.timestamp).toLocaleDateString();
-                const text = msg.content.text || msg.content.textPreview || '';
+            // Merge messages and commits into a single timeline
+            const timeline = [];
+
+            visibleMessages.forEach(msg => {
+                timeline.push({
+                    type: 'message',
+                    timestamp: new Date(msg.timestamp).getTime(),
+                    data: msg
+                });
+            });
+
+            state.commits.forEach(commit => {
+                // Parse commit timestamp: "2026-01-28 14:30:00 -0500" format
+                const commitTime = new Date(commit.timestamp.split(' ').slice(0,2).join('T')).getTime();
+                timeline.push({
+                    type: 'commit',
+                    timestamp: commitTime,
+                    data: commit,
+                    images: commitImages[commit.fullHash] || commitImages[commit.hash] || []
+                });
+            });
+
+            // Sort by timestamp
+            timeline.sort((a, b) => a.timestamp - b.timestamp);
+
+            let lastRole = null;
+            let lastDate = null;
+
+            timeline.forEach((item, i) => {
+                const itemDate = new Date(item.timestamp).toLocaleDateString();
 
                 // Add date divider if new day
-                if (msgDate !== lastDate) {
-                    container.innerHTML += `<div class="date-divider"><span>${msgDate}</span></div>`;
-                    lastDate = msgDate;
+                if (itemDate !== lastDate) {
+                    container.innerHTML += `<div class="date-divider"><span>${itemDate}</span></div>`;
+                    lastDate = itemDate;
                     lastRole = null;
                 }
 
-                const isUser = msg.role === 'user';
-                const isConsecutive = msg.role === lastRole;
-                const nextMsg = visibleMessages[i + 1];
-                const isLastInGroup = !nextMsg || nextMsg.role !== msg.role;
+                if (item.type === 'commit') {
+                    // Render commit block with thumbnails
+                    const commit = item.data;
+                    const time = new Date(item.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
-                let classes = `msg-row ${msg.role}`;
-                if (isConsecutive) classes += ' consecutive';
-                if (isLastInGroup) classes += ' last-in-group';
+                    let imagesHtml = '';
+                    if (item.images.length > 0) {
+                        imagesHtml = '<div class="commit-images">';
+                        item.images.forEach(img => {
+                            imagesHtml += `<img src="${img.path}" alt="${escapeHtml(img.name)}" title="${escapeHtml(img.name)}" onclick="event.stopPropagation(); openLightbox('${img.path}');">`;
+                        });
+                        imagesHtml += '</div>';
+                    }
 
-                // Format content with proper markdown and image links (versioned by timestamp)
-                let content = formatContent(msg.content, msg.id, msg.timestamp);
+                    container.innerHTML += `
+                        <div class="commit-block" data-commit="${commit.hash}">
+                            <div class="commit-header">
+                                <span class="commit-icon">📦</span>
+                                <span class="commit-hash">${commit.hash}</span>
+                                <span class="commit-time">${time}</span>
+                                <a href="${state.project.repository}/commit/${commit.fullHash || commit.hash}" target="_blank" class="commit-link">View on GitHub →</a>
+                            </div>
+                            <div class="commit-message">${escapeHtml(commit.message)}</div>
+                            ${imagesHtml}
+                        </div>
+                    `;
+                    lastRole = null;  // Reset consecutive tracking after commit
+                } else {
+                    // Render message
+                    const msg = item.data;
+                    const isUser = msg.role === 'user';
+                    const isConsecutive = msg.role === lastRole;
 
-                const time = new Date(msg.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-
-                container.innerHTML += `
-                    <div class="${classes}" data-msg-id="${msg.id}" data-timestamp="${new Date(msg.timestamp).getTime()}">
-                        <div class="msg-avatar">${isUser ? 'B' : 'C'}</div>
-                        <div class="bubble">${content}</div>
-                    </div>
-                    <div class="msg-time">${time}</div>
-                `;
-
-                lastRole = msg.role;
-            });
-        }
-
-        // Pre-compute image assignments: each image goes to the nearest message before it
-        function computeImageAssignments() {
-            state.imageAssignments = {};  // msgId -> [images]
-
-            state.images.forEach(img => {
-                const imgTime = new Date(img.timestamp).getTime();
-                let closestMsg = null;
-                let closestDiff = Infinity;
-
-                state.messages.forEach(msg => {
-                    const msgTime = new Date(msg.timestamp).getTime();
-                    // Only consider messages that occur BEFORE the image was created
-                    if (msgTime <= imgTime) {
-                        const diff = imgTime - msgTime;
-                        if (diff < closestDiff) {
-                            closestDiff = diff;
-                            closestMsg = msg;
+                    // Look ahead for next message (skip commits)
+                    let nextMsg = null;
+                    for (let j = i + 1; j < timeline.length; j++) {
+                        if (timeline[j].type === 'message') {
+                            nextMsg = timeline[j].data;
+                            break;
                         }
                     }
-                });
+                    const isLastInGroup = !nextMsg || nextMsg.role !== msg.role;
 
-                if (closestMsg) {
-                    if (!state.imageAssignments[closestMsg.id]) {
-                        state.imageAssignments[closestMsg.id] = [];
-                    }
-                    state.imageAssignments[closestMsg.id].push(img);
+                    let classes = `msg-row ${msg.role}`;
+                    if (isConsecutive) classes += ' consecutive';
+                    if (isLastInGroup) classes += ' last-in-group';
+
+                    let content = formatContent(msg.content, msg.id, msg.timestamp);
+                    const time = new Date(msg.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+                    container.innerHTML += `
+                        <div class="${classes}" data-msg-id="${msg.id}" data-timestamp="${item.timestamp}">
+                            <div class="msg-avatar">${isUser ? 'B' : 'C'}</div>
+                            <div class="bubble">${content}</div>
+                        </div>
+                        <div class="msg-time">${time}</div>
+                    `;
+
+                    lastRole = msg.role;
                 }
             });
-        }
-
-        // Get images assigned to a specific message
-        function getImagesForMessage(msgId) {
-            return state.imageAssignments[msgId] || [];
         }
 
         // Get the versioned path for an image at a given timestamp
@@ -1285,35 +1384,6 @@
                 html = `<div>${text}</div>`;
             }
 
-            // Add image links if this message has assigned images
-            // Skip images that are already referenced in markdown to avoid duplicates
-            if (msgId) {
-                const assignedImages = getImagesForMessage(msgId);
-                if (assignedImages.length > 0) {
-                    // Get raw text to check for existing markdown image references
-                    const rawText = content.text || content.textPreview || '';
-
-                    // Filter out images already in markdown
-                    const newImages = assignedImages.filter(img => {
-                        return !rawText.includes(`](${img.path})`) &&
-                               !rawText.includes(`](images/${img.name})`);
-                    });
-
-                    if (newImages.length > 0) {
-                        html += '<div class="inline-images">';
-                        newImages.forEach(img => {
-                            // Use versioned path based on message timestamp
-                            const imgPath = msgTimestamp ?
-                                getVersionedImagePath(img.name, msgTimestamp) :
-                                img.path;
-                            const label = img.name.replace('.png', '').replace(/_/g, ' ');
-                            html += `<img src="${imgPath}" alt="${escapeHtml(label)}" title="${escapeHtml(label)}" onclick="event.stopPropagation(); openLightbox('${imgPath}');">`;
-                        });
-                        html += '</div>';
-                    }
-                }
-            }
-
             return html;
         }
 
@@ -1375,8 +1445,8 @@
             let exhibits = [];
             let commits = [];
 
-            // Build exhibits from imageVersions to show ALL versions (v1, v2, etc.)
-            // This shows historical versions in chronological order
+            // Build exhibits purely from imageVersions (commit-based, no message matching)
+            // Each version of an image is shown with its commit timestamp
             Object.entries(state.imageVersions).forEach(([imageName, versions]) => {
                 if (!versions || versions.length === 0) return;
 
@@ -1388,9 +1458,6 @@
 
                     const label = imageName.replace('.png', '').replace('.svg', '').replace(/_/g, ' ');
 
-                    // Find the image assignment info from state.images (for current version)
-                    const imgInfo = state.images.find(i => i.name === imageName);
-
                     exhibits.push({
                         label: label,
                         imageName: imageName,
@@ -1401,36 +1468,9 @@
                         isVersion: totalVersions > 1,
                         versionNum: versionNum,
                         totalVersions: totalVersions,
-                        commitHash: ver.commitHash ? ver.commitHash.substring(0, 7) : null,
-                        // Only the latest version gets message assignment
-                        assignedMessageId: (versionNum === totalVersions && imgInfo) ? imgInfo.assignedMessageId : null,
-                        assignedMessagePage: (versionNum === totalVersions && imgInfo) ? imgInfo.assignedMessagePage : null
+                        commitHash: ver.commitHash,  // Full hash for GitHub link
+                        commitHashShort: ver.commitHash ? ver.commitHash.substring(0, 7) : null
                     });
-                });
-            });
-
-            // Also add images that don't have version history (from state.images)
-            state.images.forEach(img => {
-                // Skip if already in exhibits (has version history)
-                if (state.imageVersions[img.name]) return;
-
-                const imgTime = new Date(img.timestamp).getTime();
-                if (isNaN(imgTime)) return;
-
-                const label = img.name.replace('.png', '').replace('.svg', '').replace(/_/g, ' ');
-
-                exhibits.push({
-                    label: label,
-                    imageName: img.name,
-                    timestamp: imgTime,
-                    url: img.path,
-                    timeStr: formatTime(imgTime),
-                    dateStr: formatDate(imgTime),
-                    isVersion: false,
-                    versionNum: null,
-                    totalVersions: null,
-                    assignedMessageId: img.assignedMessageId,
-                    assignedMessagePage: img.assignedMessagePage
                 });
             });
 
@@ -1464,18 +1504,16 @@
                 // Show version badge if image has multiple versions
                 const versionBadge = img.isVersion ?
                     `<span style="font-size:8px;background:#ff9500;color:white;padding:1px 4px;border-radius:3px;margin-left:4px;">v${img.versionNum}/${img.totalVersions}</span>` : '';
-                const commitBadge = img.commitHash ?
-                    `<span style="font-size:8px;color:var(--meta-text);font-family:monospace;">${img.commitHash}</span>` : '';
 
                 html += `
                     <div class="minimap-item" style="border-left:2px solid #ff9500;" title="${escapeHtml(img.label)}">
                         <div style="display:flex;align-items:center;gap:4px;">
                             <span style="font-size:9px;color:var(--meta-text);">${img.timeStr}</span>
-                            ${commitBadge}
+                            ${img.commitHashShort ? `<span style="font-size:8px;color:var(--meta-text);font-family:monospace;">${img.commitHashShort}</span>` : ''}
                         </div>
                         <div style="font-size:10px;margin-top:1px;">${escapeHtml(img.imageName ? img.imageName.replace('.png', '').replace(/_/g, ' ') : img.label)}${versionBadge}</div>
                         <div style="display:flex;gap:6px;margin-top:2px;font-size:9px;">
-                            ${img.assignedMessageId ? `<a href="#" onclick="event.stopPropagation();scrollToMessageById('${img.assignedMessageId}', ${img.assignedMessagePage});return false;" style="color:#007aff;">→ Msg</a>` : ''}
+                            ${img.commitHash ? `<a href="${state.project.repository}/commit/${img.commitHash}" target="_blank" onclick="event.stopPropagation();" style="color:#34c759;">Commit</a>` : ''}
                             <a href="#" onclick="event.stopPropagation();openLightbox('${img.url}');return false;" style="color:#ff9500;">View</a>
                         </div>
                     </div>`;
