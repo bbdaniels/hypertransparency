@@ -1,39 +1,46 @@
 {
+  "version": "1.0",
   "imageVersions": {
     "revenue_trends.svg": [
       {
-        "commitHash": "commit001",
+        "commitHash": "abc1234",
+        "fullHash": "abc1234567890abcdef1234567890abcdef12345",
         "timestamp": "2026-01-28T14:01:30.000Z",
-        "localPath": "images/revenue_trends_v1.svg"
+        "gitPath": "images/revenue_trends_v1.svg"
       },
       {
-        "commitHash": "commit004",
+        "commitHash": "def5678",
+        "fullHash": "def5678901234567890abcdef1234567890abcde",
         "timestamp": "2026-01-28T14:03:55.000Z",
-        "localPath": "images/revenue_trends.svg"
+        "gitPath": "images/revenue_trends.svg"
       }
     ],
     "category_breakdown.svg": [
       {
-        "commitHash": "commit002",
+        "commitHash": "abc1234",
+        "fullHash": "abc1234567890abcdef1234567890abcdef12345",
         "timestamp": "2026-01-28T14:02:00.000Z",
-        "localPath": "images/category_breakdown_v1.svg"
+        "gitPath": "images/category_breakdown_v1.svg"
       },
       {
-        "commitHash": "commit005",
+        "commitHash": "def5678",
+        "fullHash": "def5678901234567890abcdef1234567890abcde",
         "timestamp": "2026-01-28T14:04:25.000Z",
-        "localPath": "images/category_breakdown.svg"
+        "gitPath": "images/category_breakdown.svg"
       }
     ],
     "marketing_roi.svg": [
       {
-        "commitHash": "commit003",
+        "commitHash": "abc1234",
+        "fullHash": "abc1234567890abcdef1234567890abcdef12345",
         "timestamp": "2026-01-28T14:02:30.000Z",
-        "localPath": "images/marketing_roi_v1.svg"
+        "gitPath": "images/marketing_roi_v1.svg"
       },
       {
-        "commitHash": "commit006",
+        "commitHash": "def5678",
+        "fullHash": "def5678901234567890abcdef1234567890abcde",
         "timestamp": "2026-01-28T14:04:55.000Z",
-        "localPath": "images/marketing_roi.svg"
+        "gitPath": "images/marketing_roi.svg"
       }
     ]
   }

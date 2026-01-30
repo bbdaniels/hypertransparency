@@ -12,14 +12,14 @@
       "timestamp": "2026-01-28T14:00:00.000Z",
       "sessionId": "demo-session",
       "content": {
-        "text": "I have sales data in sales_data.csv. Can you analyze it and create some visualizations?",
-        "textPreview": "I have sales data in sales_data.csv. Can you analyze it and create some visualizations?",
+        "text": "I have some data I'd like to visualize. Can you create some charts?",
+        "textPreview": "I have some data I'd like to visualize. Can you create some charts?",
         "hasThinking": false,
         "toolCalls": []
       },
       "artifacts": [],
       "relatedCommits": [],
-      "searchText": "sales data csv analyze visualizations"
+      "searchText": "data visualize charts"
     },
     {
       "id": "msg_demo002",
@@ -28,22 +28,22 @@
       "timestamp": "2026-01-28T14:00:15.000Z",
       "sessionId": "demo-session",
       "content": {
-        "text": "I'll analyze your sales data and create visualizations. Let me first read the CSV file to understand its structure.",
-        "textPreview": "I'll analyze your sales data and create visualizations...",
+        "text": "I'll create some visualizations for you. Let me first look at the data to understand its structure.",
+        "textPreview": "I'll create some visualizations for you...",
         "hasThinking": true,
-        "thinkingPreview": "The user wants me to analyze sales data from a CSV file. I should first read it to understand the structure - columns, data types, time period covered. Then I can suggest appropriate visualizations like trend lines, category breakdowns, and correlation analysis...",
+        "thinkingPreview": "The user wants me to create charts. I should first understand the data structure - columns, data types, time period covered. Then I can suggest appropriate visualizations...",
         "toolCalls": [
           {
             "id": "tool_001",
             "name": "Read",
-            "input": {"file_path": "/project/sales_data.csv"},
-            "inputPreview": "Read: sales_data.csv"
+            "input": {"file_path": "/project/data.csv"},
+            "inputPreview": "Read: data.csv"
           }
         ]
       },
       "artifacts": [],
       "relatedCommits": [],
-      "searchText": "analyze sales data visualizations read csv file structure"
+      "searchText": "visualizations data structure"
     },
     {
       "id": "msg_demo003",
@@ -52,14 +52,14 @@
       "timestamp": "2026-01-28T14:00:45.000Z",
       "sessionId": "demo-session",
       "content": {
-        "text": "The data contains monthly sales from 2024-2025 across 5 product categories. I can see:\n\n- **Time series data**: Monthly records for 2 years\n- **Categories**: Product A, B, C, D, and Services\n- **Metrics**: Revenue, units sold, marketing spend, new customers\n\nLet me create three visualizations:\n\n1. **Revenue trends** - Compare 2024 vs 2025 monthly revenue\n2. **Category breakdown** - Sales by product category\n3. **Marketing ROI** - Relationship between marketing spend and new customers",
-        "textPreview": "The data contains monthly sales from 2024-2025 across 5 product categories...",
+        "text": "The data contains monthly metrics across several categories. I can see:\n\n- **Time series data**: Monthly records for 2 years\n- **Categories**: Five product categories\n- **Metrics**: Revenue, volume, spend, and customers\n\nLet me create three visualizations:\n\n1. **Trends over time** - Compare performance across years\n2. **Category breakdown** - Distribution by category\n3. **Correlation analysis** - Relationship between spend and outcomes",
+        "textPreview": "The data contains monthly metrics across several categories...",
         "hasThinking": false,
         "toolCalls": []
       },
       "artifacts": [],
       "relatedCommits": [],
-      "searchText": "monthly sales 2024 2025 product categories revenue trends marketing roi"
+      "searchText": "monthly metrics categories trends correlation"
     },
     {
       "id": "msg_demo004",
@@ -84,10 +84,10 @@
       "timestamp": "2026-01-28T14:01:30.000Z",
       "sessionId": "demo-session",
       "content": {
-        "text": "I've created the first visualization showing monthly revenue trends.\n\n![Revenue Trends](images/revenue_trends.svg)\n\n**Initial draft** - showing 2024 data. I'll add 2025 comparison in the next revision.",
-        "textPreview": "I've created the first visualization showing monthly revenue trends...",
+        "text": "I've created the first visualization showing trends over time.\n\n![Revenue Trends](images/revenue_trends.svg)\n\n**Initial draft** - showing baseline data. I'll add more comparisons in the next revision.",
+        "textPreview": "I've created the first visualization showing trends over time...",
         "hasThinking": true,
-        "thinkingPreview": "Creating a line chart comparing 2024 vs 2025 monthly revenue. Using blue for 2024 and green for 2025 to distinguish the years clearly. The chart shows cumulative monthly growth patterns...",
+        "thinkingPreview": "Creating a line chart for the time series. Using clear colors to distinguish the data series clearly...",
         "toolCalls": [
           {
             "id": "tool_002",
@@ -97,16 +97,9 @@
           }
         ]
       },
-      "artifacts": [
-        {
-          "type": "image",
-          "id": "img_revenue_trends",
-          "name": "revenue_trends.svg",
-          "path": "images/revenue_trends.svg"
-        }
-      ],
-      "relatedCommits": ["commit001"],
-      "searchText": "revenue trends visualization 2024 draft"
+      "artifacts": [],
+      "relatedCommits": ["abc1234"],
+      "searchText": "trends visualization draft"
     },
     {
       "id": "msg_demo006",
@@ -115,8 +108,8 @@
       "timestamp": "2026-01-28T14:02:00.000Z",
       "sessionId": "demo-session",
       "content": {
-        "text": "Here's the category breakdown showing sales by product.\n\n![Category Breakdown](images/category_breakdown.svg)\n\n**Initial draft** - basic bars. Will add sorting and colors in revision.",
-        "textPreview": "Here's the category breakdown showing sales by product...",
+        "text": "Here's the category breakdown chart.\n\n![Category Breakdown](images/category_breakdown.svg)\n\n**Initial draft** - basic bars. Will add sorting and colors in revision.",
+        "textPreview": "Here's the category breakdown chart...",
         "hasThinking": false,
         "toolCalls": [
           {
@@ -127,16 +120,9 @@
           }
         ]
       },
-      "artifacts": [
-        {
-          "type": "image",
-          "id": "img_category_breakdown",
-          "name": "category_breakdown.svg",
-          "path": "images/category_breakdown.svg"
-        }
-      ],
-      "relatedCommits": ["commit002"],
-      "searchText": "category breakdown sales product draft"
+      "artifacts": [],
+      "relatedCommits": ["abc1234"],
+      "searchText": "category breakdown draft"
     },
     {
       "id": "msg_demo007",
@@ -145,10 +131,10 @@
       "timestamp": "2026-01-28T14:02:30.000Z",
       "sessionId": "demo-session",
       "content": {
-        "text": "Finally, here's the marketing data scatter plot.\n\n![Marketing ROI](images/marketing_roi.svg)\n\n**Initial draft** - scatter points only. Will add regression trend line in revision.",
-        "textPreview": "Finally, here's the marketing data scatter plot...",
+        "text": "Finally, here's the correlation scatter plot.\n\n![Marketing ROI](images/marketing_roi.svg)\n\n**Initial draft** - scatter points only. Will add regression trend line in revision.",
+        "textPreview": "Finally, here's the correlation scatter plot...",
         "hasThinking": true,
-        "thinkingPreview": "Creating a scatter plot to show the relationship between marketing spend and customer acquisition...",
+        "thinkingPreview": "Creating a scatter plot to show the relationship between variables...",
         "toolCalls": [
           {
             "id": "tool_004",
@@ -158,16 +144,9 @@
           }
         ]
       },
-      "artifacts": [
-        {
-          "type": "image",
-          "id": "img_marketing_roi",
-          "name": "marketing_roi.svg",
-          "path": "images/marketing_roi.svg"
-        }
-      ],
-      "relatedCommits": ["commit003"],
-      "searchText": "marketing roi scatter plot draft"
+      "artifacts": [],
+      "relatedCommits": ["abc1234"],
+      "searchText": "correlation scatter plot draft"
     },
     {
       "id": "msg_demo008",
@@ -176,14 +155,14 @@
       "timestamp": "2026-01-28T14:03:00.000Z",
       "sessionId": "demo-session",
       "content": {
-        "text": "Good start! Can you improve these? Add 2025 to the trends, sort the categories by value, and add a trend line to the ROI chart.",
+        "text": "Good start! Can you improve these? Add more years to the trends, sort the categories by value, and add a trend line to the correlation chart.",
         "textPreview": "Good start! Can you improve these?",
         "hasThinking": false,
         "toolCalls": []
       },
       "artifacts": [],
       "relatedCommits": [],
-      "searchText": "improve add 2025 sort categories trend line"
+      "searchText": "improve add years sort categories trend line"
     },
     {
       "id": "msg_demo009",
@@ -195,7 +174,7 @@
         "text": "Great feedback! Let me update all three charts with your suggestions.",
         "textPreview": "Great feedback! Let me update all three charts with your suggestions.",
         "hasThinking": true,
-        "thinkingPreview": "The user wants three improvements: 1) Add 2025 data to revenue trends, 2) Sort category bars by value descending, 3) Add regression line to marketing ROI. I'll update each chart...",
+        "thinkingPreview": "The user wants three improvements: 1) Add more years to trends, 2) Sort category bars by value descending, 3) Add regression line. I'll update each chart...",
         "toolCalls": []
       },
       "artifacts": [],
@@ -209,8 +188,8 @@
       "timestamp": "2026-01-28T14:03:55.000Z",
       "sessionId": "demo-session",
       "content": {
-        "text": "**Updated revenue trends** with 2025 data added:\n\n![Revenue Trends](images/revenue_trends.svg)\n\n**Key findings:**\n- 2025 revenue consistently outperforms 2024\n- Strong growth trajectory in both years\n- Q4 shows acceleration in 2025",
-        "textPreview": "Updated revenue trends with 2025 data added...",
+        "text": "**Updated trends chart** with additional year data:\n\n![Revenue Trends](images/revenue_trends.svg)\n\n**Key findings:**\n- Clear growth trajectory visible\n- Strong acceleration in recent quarters\n- Seasonal patterns emerge",
+        "textPreview": "Updated trends chart with additional year data...",
         "hasThinking": false,
         "toolCalls": [
           {
@@ -221,16 +200,9 @@
           }
         ]
       },
-      "artifacts": [
-        {
-          "type": "image",
-          "id": "img_revenue_trends",
-          "name": "revenue_trends.svg",
-          "path": "images/revenue_trends.svg"
-        }
-      ],
-      "relatedCommits": ["commit004"],
-      "searchText": "updated revenue trends 2025 data growth q4"
+      "artifacts": [],
+      "relatedCommits": ["def5678"],
+      "searchText": "updated trends chart growth"
     },
     {
       "id": "msg_demo012",
@@ -239,7 +211,7 @@
       "timestamp": "2026-01-28T14:04:25.000Z",
       "sessionId": "demo-session",
       "content": {
-        "text": "**Updated category breakdown** - sorted by value with distinct colors:\n\n![Category Breakdown](images/category_breakdown.svg)\n\n**Key findings:**\n- Product A leads at $65K\n- Services segment strong at $60K\n- Product D underperforming at $28K - may need attention",
+        "text": "**Updated category breakdown** - sorted by value with distinct colors:\n\n![Category Breakdown](images/category_breakdown.svg)\n\n**Key findings:**\n- Top category clearly leads\n- Services segment performing well\n- Bottom category may need attention",
         "textPreview": "Updated category breakdown - sorted by value with distinct colors...",
         "hasThinking": false,
         "toolCalls": [
@@ -251,16 +223,9 @@
           }
         ]
       },
-      "artifacts": [
-        {
-          "type": "image",
-          "id": "img_category_breakdown",
-          "name": "category_breakdown.svg",
-          "path": "images/category_breakdown.svg"
-        }
-      ],
-      "relatedCommits": ["commit005"],
-      "searchText": "updated category breakdown sorted colors product services"
+      "artifacts": [],
+      "relatedCommits": ["def5678"],
+      "searchText": "updated category breakdown sorted colors"
     },
     {
       "id": "msg_demo013",
@@ -269,10 +234,10 @@
       "timestamp": "2026-01-28T14:04:55.000Z",
       "sessionId": "demo-session",
       "content": {
-        "text": "**Updated marketing ROI** with regression trend line:\n\n![Marketing ROI](images/marketing_roi.svg)\n\n**Key findings:**\n- Strong positive correlation (R² = 0.82) between marketing spend and new customers\n- Each $1K in marketing spend generates ~0.82 new customers\n- Baseline of ~8.5 customers even with zero spend (organic growth)\n\nThis suggests marketing investments are effective and scalable.",
-        "textPreview": "Updated marketing ROI with regression trend line...",
+        "text": "**Updated correlation chart** with regression trend line:\n\n![Marketing ROI](images/marketing_roi.svg)\n\n**Key findings:**\n- Strong positive correlation visible\n- Trend line shows clear relationship\n- Suggests investments are effective",
+        "textPreview": "Updated correlation chart with regression trend line...",
         "hasThinking": true,
-        "thinkingPreview": "Adding the regression line to show the trend. The equation y = 0.82x + 8.5 indicates strong ROI. The R² of 0.82 shows good fit...",
+        "thinkingPreview": "Adding the regression line to show the trend. The fit looks good indicating strong relationship...",
         "toolCalls": [
           {
             "id": "tool_007",
@@ -282,16 +247,9 @@
           }
         ]
       },
-      "artifacts": [
-        {
-          "type": "image",
-          "id": "img_marketing_roi",
-          "name": "marketing_roi.svg",
-          "path": "images/marketing_roi.svg"
-        }
-      ],
-      "relatedCommits": ["commit006"],
-      "searchText": "updated marketing roi regression trend line correlation"
+      "artifacts": [],
+      "relatedCommits": ["def5678"],
+      "searchText": "updated correlation regression trend line"
     },
     {
       "id": "msg_demo014",
@@ -316,15 +274,15 @@
       "timestamp": "2026-01-28T14:06:00.000Z",
       "sessionId": "demo-session",
       "content": {
-        "text": "## Sales Analysis Summary\n\n### Revenue Growth\n- 2025 YTD revenue up **23%** vs 2024\n- Strongest growth in Q3-Q4\n- Trajectory suggests hitting $200K+ by year end\n\n### Product Performance\n- **Top performers**: Product A ($65K), Services ($60K)\n- **Needs attention**: Product D ($28K) - consider pricing or marketing review\n- Services growing fastest (+15% QoQ)\n\n### Marketing Effectiveness\n- **ROI**: $1 marketing spend → 0.82 new customers\n- **Organic baseline**: ~8.5 customers/month without marketing\n- **Recommendation**: Increase marketing budget - strong scalability shown\n\n### Action Items\n1. Investigate Product D underperformance\n2. Allocate more budget to marketing\n3. Continue Services expansion",
-        "textPreview": "## Sales Analysis Summary...",
+        "text": "## Analysis Summary\n\n### Trends\n- Strong upward trajectory\n- Acceleration in recent periods\n- Clear seasonal patterns\n\n### Categories\n- **Top performers** identified\n- **Underperformers** flagged for review\n- Services showing strong growth\n\n### Correlation\n- Strong positive relationship confirmed\n- Investments showing good returns\n- Data supports continued allocation\n\n### Recommendations\n1. Investigate underperforming categories\n2. Continue current investment strategy\n3. Monitor seasonal trends for planning",
+        "textPreview": "## Analysis Summary...",
         "hasThinking": true,
-        "thinkingPreview": "The user wants a summary of all the visualizations. I should synthesize the key findings from each chart and provide actionable recommendations based on the data...",
+        "thinkingPreview": "The user wants a summary of all the visualizations. I should synthesize the key findings and provide actionable recommendations...",
         "toolCalls": []
       },
       "artifacts": [],
       "relatedCommits": [],
-      "searchText": "sales analysis summary revenue growth product performance marketing effectiveness recommendations"
+      "searchText": "analysis summary trends categories correlation recommendations"
     }
   ]
 }

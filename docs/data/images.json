@@ -1,32 +1,4 @@
 {
   "version": "1.0",
-  "images": [
-    {
-      "id": "img_revenue_trends",
-      "name": "revenue_trends.svg",
-      "path": "images/revenue_trends.svg",
-      "timestamp": "2026-01-28T14:04:00",
-      "fileSize": 3500,
-      "assignedMessageId": "msg_demo011",
-      "assignedMessagePage": 1
-    },
-    {
-      "id": "img_category_breakdown",
-      "name": "category_breakdown.svg",
-      "path": "images/category_breakdown.svg",
-      "timestamp": "2026-01-28T14:04:30",
-      "fileSize": 2800,
-      "assignedMessageId": "msg_demo012",
-      "assignedMessagePage": 1
-    },
-    {
-      "id": "img_marketing_roi",
-      "name": "marketing_roi.svg",
-      "path": "images/marketing_roi.svg",
-      "timestamp": "2026-01-28T14:05:00",
-      "fileSize": 3200,
-      "assignedMessageId": "msg_demo013",
-      "assignedMessagePage": 1
-    }
-  ]
+  "images": []
 }
