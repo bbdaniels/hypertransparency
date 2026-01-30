@@ -1513,7 +1513,7 @@
                         </div>
                         <div style="font-size:10px;margin-top:1px;">${escapeHtml(img.imageName ? img.imageName.replace('.png', '').replace(/_/g, ' ') : img.label)}${versionBadge}</div>
                         <div style="display:flex;gap:6px;margin-top:2px;font-size:9px;">
-                            ${img.commitHash ? `<a href="${state.project.repository}/commit/${img.commitHash}" target="_blank" onclick="event.stopPropagation();" style="color:#34c759;">Commit</a>` : ''}
+                            ${img.commitHashShort ? `<a href="#" onclick="event.stopPropagation();scrollToCommit('${img.commitHashShort}', ${img.timestamp});return false;" style="color:#34c759;">→ Commit</a>` : ''}
                             <a href="#" onclick="event.stopPropagation();openLightbox('${img.url}');return false;" style="color:#ff9500;">View</a>
                         </div>
                     </div>`;
@@ -1537,7 +1537,7 @@
                         </div>
                         <div style="font-size:10px;margin-top:1px;">${escapeHtml(commit.label)}</div>
                         <div style="display:flex;gap:6px;margin-top:2px;font-size:9px;">
-                            <a href="#" onclick="event.stopPropagation();scrollToMessageByTimestamp(${commit.timestamp});return false;" style="color:#007aff;">→ Msg</a>
+                            <a href="#" onclick="event.stopPropagation();scrollToCommit('${commit.hash}', ${commit.timestamp});return false;" style="color:#007aff;">→ Scroll</a>
                             <a href="${state.project.repository}/commit/${commit.fullHash || commit.hash}" target="_blank" onclick="event.stopPropagation();" style="color:#34c759;">GitHub</a>
                         </div>
                     </div>`;
@@ -1579,6 +1579,21 @@
                 closestEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 closestEl.style.outline = '2px solid #007aff';
                 setTimeout(() => { closestEl.style.outline = ''; }, 2000);
+            }
+        }
+
+        async function scrollToCommit(commitHash, commitTimestamp) {
+            // First ensure the page with this commit's timestamp is loaded
+            if (commitTimestamp) {
+                await scrollToMessageByTimestamp(commitTimestamp);
+            }
+
+            // Find the commit block by hash
+            const commitEl = document.querySelector(`.commit-block[data-commit="${commitHash}"]`);
+            if (commitEl) {
+                commitEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                commitEl.style.outline = '2px solid #34c759';
+                setTimeout(() => { commitEl.style.outline = ''; }, 2000);
             }
         }
 
