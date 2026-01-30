@@ -1,20 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400">
   <defs>
     <linearGradient id="bg2" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#fafafa"/>
-      <stop offset="100%" style="stop-color:#f0f0f0"/>
+      <stop offset="0%" style="stop-color:#f8f9fa"/>
+      <stop offset="100%" style="stop-color:#e9ecef"/>
     </linearGradient>
   </defs>
   <rect width="500" height="400" fill="url(#bg2)"/>
-
-  <!-- DRAFT watermark -->
-  <text x="250" y="220" text-anchor="middle" font-family="system-ui" font-size="70" font-weight="bold" fill="#e0e0e0" transform="rotate(-25 250 200)">DRAFT</text>
-
-  <text x="250" y="35" text-anchor="middle" font-family="system-ui" font-size="18" font-weight="bold" fill="#666">Sales by Category</text>
-  <text x="250" y="55" text-anchor="middle" font-family="system-ui" font-size="11" fill="#999">Initial version — unsorted, no colors</text>
+  <text x="250" y="35" text-anchor="middle" font-family="system-ui" font-size="18" font-weight="bold" fill="#333">Sales by Product Category</text>
 
   <!-- Grid lines -->
-  <g stroke="#e5e5e5" stroke-width="1">
+  <g stroke="#dee2e6" stroke-width="1">
     <line x1="60" y1="320" x2="460" y2="320"/>
     <line x1="60" y1="260" x2="460" y2="260"/>
     <line x1="60" y1="200" x2="460" y2="200"/>
@@ -23,7 +18,7 @@
   </g>
 
   <!-- Y-axis labels -->
-  <g font-family="system-ui" font-size="11" fill="#999" text-anchor="end">
+  <g font-family="system-ui" font-size="11" fill="#666" text-anchor="end">
     <text x="55" y="324">$0K</text>
     <text x="55" y="264">$20K</text>
     <text x="55" y="204">$40K</text>
@@ -31,32 +26,36 @@
     <text x="55" y="84">$80K</text>
   </g>
 
-  <!-- Bars (unsorted, all gray with dashed outline) -->
-  <rect x="80" y="232" width="55" height="88" fill="#ccc" stroke="#aaa" stroke-width="1" stroke-dasharray="4,2" rx="3"/>
-  <rect x="155" y="184" width="55" height="136" fill="#ccc" stroke="#aaa" stroke-width="1" stroke-dasharray="4,2" rx="3"/>
-  <rect x="230" y="112" width="55" height="208" fill="#ccc" stroke="#aaa" stroke-width="1" stroke-dasharray="4,2" rx="3"/>
-  <rect x="305" y="160" width="55" height="160" fill="#ccc" stroke="#aaa" stroke-width="1" stroke-dasharray="4,2" rx="3"/>
-  <rect x="380" y="130" width="55" height="190" fill="#ccc" stroke="#aaa" stroke-width="1" stroke-dasharray="4,2" rx="3"/>
+  <!-- Bars -->
+  <rect x="80" y="112" width="55" height="208" fill="#3498db" rx="3"/>
+  <rect x="155" y="160" width="55" height="160" fill="#2ecc71" rx="3"/>
+  <rect x="230" y="184" width="55" height="136" fill="#e74c3c" rx="3"/>
+  <rect x="305" y="232" width="55" height="88" fill="#f39c12" rx="3"/>
+  <rect x="380" y="130" width="55" height="190" fill="#9b59b6" rx="3"/>
 
   <!-- Value labels -->
-  <g font-family="system-ui" font-size="12" font-weight="bold" fill="#888" text-anchor="middle">
-    <text x="107" y="222">$28K</text>
-    <text x="182" y="174">$42K</text>
-    <text x="257" y="102">$65K</text>
-    <text x="332" y="150">$50K</text>
+  <g font-family="system-ui" font-size="12" font-weight="bold" fill="#333" text-anchor="middle">
+    <text x="107" y="102">$65K</text>
+    <text x="182" y="150">$50K</text>
+    <text x="257" y="174">$42K</text>
+    <text x="332" y="222">$28K</text>
     <text x="407" y="120">$60K</text>
   </g>
 
   <!-- X-axis labels -->
-  <g font-family="system-ui" font-size="11" fill="#999" text-anchor="middle">
-    <text x="107" y="340">Product D</text>
-    <text x="182" y="340">Product C</text>
-    <text x="257" y="340">Product A</text>
-    <text x="332" y="340">Product B</text>
+  <g font-family="system-ui" font-size="11" fill="#666" text-anchor="middle">
+    <text x="107" y="340">Product A</text>
+    <text x="182" y="340">Product B</text>
+    <text x="257" y="340">Product C</text>
+    <text x="332" y="340">Product D</text>
     <text x="407" y="340">Services</text>
   </g>
 
-  <!-- Draft badge -->
-  <rect x="10" y="10" width="60" height="24" fill="#ff9800" rx="4"/>
-  <text x="40" y="27" text-anchor="middle" font-family="system-ui" font-size="11" font-weight="bold" fill="white">DRAFT</text>
+  <!-- Axis labels -->
+  <text x="260" y="370" text-anchor="middle" font-family="system-ui" font-size="12" fill="#666">Category</text>
+  <text x="20" y="200" text-anchor="middle" font-family="system-ui" font-size="12" fill="#666" transform="rotate(-90,20,200)">Sales</text>
+
+  <!-- Final badge -->
+  <rect x="10" y="10" width="55" height="24" fill="#2ecc71" rx="4"/>
+  <text x="37" y="27" text-anchor="middle" font-family="system-ui" font-size="11" font-weight="bold" fill="white">FINAL</text>
 </svg>
