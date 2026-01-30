@@ -359,45 +359,33 @@ class HypertransparencyBuilder:
                                 break
 
     def extract_versioned_artifacts(self, commits: List[dict]) -> dict:
-        """Extract and store artifacts at each commit version."""
-        artifacts_dir = self.data_dir / "artifacts"
-        artifacts_dir.mkdir(exist_ok=True)
+        """Build image version history from git commits.
 
+        No longer extracts files - instead stores git paths for use with
+        raw.githubusercontent.com URLs at render time.
+        """
         image_versions = defaultdict(list)
 
         for commit in commits:
             commit_hash = commit["hash"]
-            commit_dir = artifacts_dir / commit_hash
+            full_hash = commit["fullHash"]
             commit_timestamp = commit.get("timestamp", "")
 
             for file_change in commit.get("filesChanged", []):
                 file_path = file_change.get("path", "")
+                # Skip files in docs/ output directory
+                if file_path.startswith("docs/"):
+                    continue
                 if file_path.endswith(".png") or file_path.endswith(".jpg"):
-                    try:
-                        result = subprocess.run(
-                            ["git", "show", f"{commit['fullHash']}:{file_path}"],
-                            cwd=self.repo_path, capture_output=True, timeout=10
-                        )
-                        if result.returncode == 0:
-                            commit_dir.mkdir(exist_ok=True)
-                            image_name = Path(file_path).name
-                            output_path = commit_dir / image_name
-                            output_path.write_bytes(result.stdout)
+                    image_name = Path(file_path).name
 
-                            local_path = f"data/artifacts/{commit_hash}/{image_name}"
-
-                            commit.setdefault("versionedArtifacts", []).append({
-                                "path": file_path,
-                                "localPath": local_path
-                            })
-
-                            image_versions[image_name].append({
-                                "commitHash": commit_hash,
-                                "timestamp": commit_timestamp,
-                                "localPath": local_path
-                            })
-                    except Exception:
-                        pass
+                    # Store git path for raw.githubusercontent.com URL building
+                    image_versions[image_name].append({
+                        "commitHash": commit_hash,
+                        "fullHash": full_hash,
+                        "timestamp": commit_timestamp,
+                        "gitPath": file_path  # e.g., "explore/fig-1.png"
+                    })
 
         return dict(image_versions)
 

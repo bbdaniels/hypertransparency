@@ -1002,7 +1002,7 @@
             messages: [],
             commits: [],
             images: [],
-            imageVersions: {},  // imageName -> [{commitHash, timestamp, localPath}]
+            imageVersions: {},  // imageName -> [{commitHash, fullHash, timestamp, gitPath}]
             currentPage: 0,
             totalPages: 0,
             loading: false,
@@ -1193,17 +1193,22 @@
                 return true;
             });
 
-            // Build a map of commit hash -> changed images
+            // Build a map of commit hash -> changed images (using raw GitHub URLs)
             const commitImages = {};
             Object.entries(state.imageVersions).forEach(([imageName, versions]) => {
                 versions.forEach(ver => {
-                    if (!commitImages[ver.commitHash]) {
-                        commitImages[ver.commitHash] = [];
+                    const hash = ver.fullHash || ver.commitHash;
+                    if (!commitImages[hash]) {
+                        commitImages[hash] = [];
                     }
-                    commitImages[ver.commitHash].push({
-                        name: imageName,
-                        path: ver.localPath
-                    });
+                    // Build raw GitHub URL from gitPath
+                    const rawUrl = getRawGitHubUrl(ver.gitPath, hash);
+                    if (rawUrl) {
+                        commitImages[hash].push({
+                            name: imageName,
+                            path: rawUrl
+                        });
+                    }
                 });
             });
 
@@ -1309,7 +1314,7 @@
         }
 
         // Get the versioned path for an image at a given timestamp
-        // Returns the version that existed at that point in time
+        // Returns the version that existed at that point in time (as raw GitHub URL)
         function getVersionedImagePath(imageName, msgTimestamp) {
             const versions = state.imageVersions[imageName];
             if (!versions || versions.length === 0) {
@@ -1333,12 +1338,14 @@
             }
 
             if (bestVersion) {
-                return bestVersion.localPath;
+                const fullHash = bestVersion.fullHash || bestVersion.commitHash;
+                return getRawGitHubUrl(bestVersion.gitPath, fullHash) || `images/${imageName}`;
             }
 
             // If message is before all commits, use the first version
-            // (the image existed but we're viewing before the first commit)
-            return versions[0].localPath;
+            const firstVersion = versions[0];
+            const fullHash = firstVersion.fullHash || firstVersion.commitHash;
+            return getRawGitHubUrl(firstVersion.gitPath, fullHash) || `images/${imageName}`;
         }
 
         function formatContent(content, msgId = null, msgTimestamp = null) {
@@ -1447,6 +1454,7 @@
 
             // Build exhibits purely from imageVersions (commit-based, no message matching)
             // Each version of an image is shown with its commit timestamp
+            // URLs are built from raw.githubusercontent.com using gitPath
             Object.entries(state.imageVersions).forEach(([imageName, versions]) => {
                 if (!versions || versions.length === 0) return;
 
@@ -1457,18 +1465,20 @@
                     if (isNaN(verTime)) return;
 
                     const label = imageName.replace('.png', '').replace('.svg', '').replace(/_/g, ' ');
+                    const fullHash = ver.fullHash || ver.commitHash;
+                    const rawUrl = getRawGitHubUrl(ver.gitPath, fullHash);
 
                     exhibits.push({
                         label: label,
                         imageName: imageName,
                         timestamp: verTime,
-                        url: ver.localPath,
+                        url: rawUrl,
                         timeStr: formatTime(verTime),
                         dateStr: formatDate(verTime),
                         isVersion: totalVersions > 1,
                         versionNum: versionNum,
                         totalVersions: totalVersions,
-                        commitHash: ver.commitHash,  // Full hash for GitHub link
+                        commitHash: fullHash,
                         commitHashShort: ver.commitHash ? ver.commitHash.substring(0, 7) : null
                     });
                 });
@@ -1537,8 +1547,8 @@
                         </div>
                         <div style="font-size:10px;margin-top:1px;">${escapeHtml(commit.label)}</div>
                         <div style="display:flex;gap:6px;margin-top:2px;font-size:9px;">
-                            <a href="#" onclick="event.stopPropagation();scrollToCommit('${commit.hash}', ${commit.timestamp});return false;" style="color:#007aff;">→ Scroll</a>
-                            <a href="${state.project.repository}/commit/${commit.fullHash || commit.hash}" target="_blank" onclick="event.stopPropagation();" style="color:#34c759;">GitHub</a>
+                            <a href="#" onclick="event.stopPropagation();scrollToCommit('${commit.hash}', ${commit.timestamp});return false;" style="color:#34c759;">→ Commit</a>
+                            <a href="${state.project.repository}/commit/${commit.fullHash || commit.hash}" target="_blank" onclick="event.stopPropagation();" style="color:#007aff;">View</a>
                         </div>
                     </div>`;
             });
@@ -1687,6 +1697,20 @@
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
+        }
+
+        // Build raw.githubusercontent.com URL from repo URL and git path
+        function getRawGitHubUrl(gitPath, commitHash) {
+            // state.project.repository is like "https://github.com/owner/repo"
+            // We need "https://raw.githubusercontent.com/owner/repo/{commitHash}/{gitPath}"
+            const repoUrl = state.project.repository || '';
+            if (!repoUrl || !gitPath || !commitHash) return null;
+
+            const match = repoUrl.match(/github\.com\/([^\/]+)\/([^\/]+)/);
+            if (!match) return null;
+
+            const [, owner, repo] = match;
+            return `https://raw.githubusercontent.com/${owner}/${repo}/${commitHash}/${gitPath}`;
         }
 
         function showArtifact(filePath, action) {
