@@ -2,29 +2,29 @@
   "version": "1.0",
   "commits": [
     {
-      "hash": "abc1234",
-      "fullHash": "abc1234567890abcdef1234567890abcdef12345",
+      "hash": "83d80da",
+      "fullHash": "83d80da5a6a4bd4df0a7d0c1e6f39fd1542834da",
       "timestamp": "2026-01-28 14:02:30 -0500",
-      "message": "Add initial chart visualizations (v1)",
+      "message": "Add initial chart visualizations (v1 drafts)",
       "author": "Claude",
       "filesChanged": [
-        {"status": "A", "path": "images/revenue_trends_v1.svg"},
-        {"status": "A", "path": "images/category_breakdown_v1.svg"},
-        {"status": "A", "path": "images/marketing_roi_v1.svg"}
+        {"status": "A", "path": "docs/images/revenue_trends.svg"},
+        {"status": "A", "path": "docs/images/category_breakdown.svg"},
+        {"status": "A", "path": "docs/images/marketing_roi.svg"}
       ],
       "relatedMessages": ["msg_demo005", "msg_demo006", "msg_demo007"],
       "relatedArtifacts": []
     },
     {
-      "hash": "def5678",
-      "fullHash": "def5678901234567890abcdef1234567890abcde",
+      "hash": "0c69875",
+      "fullHash": "0c69875760b57af2cc57cb163c81046b557fa8c0",
       "timestamp": "2026-01-28 14:04:55 -0500",
-      "message": "Update charts with improvements (v2)",
+      "message": "Update charts with improvements (v2 final)",
       "author": "Claude",
       "filesChanged": [
-        {"status": "M", "path": "images/revenue_trends.svg"},
-        {"status": "M", "path": "images/category_breakdown.svg"},
-        {"status": "M", "path": "images/marketing_roi.svg"}
+        {"status": "M", "path": "docs/images/revenue_trends.svg"},
+        {"status": "M", "path": "docs/images/category_breakdown.svg"},
+        {"status": "M", "path": "docs/images/marketing_roi.svg"}
       ],
       "relatedMessages": ["msg_demo011", "msg_demo012", "msg_demo013"],
       "relatedArtifacts": []

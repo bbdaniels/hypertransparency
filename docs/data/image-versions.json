@@ -3,44 +3,44 @@
   "imageVersions": {
     "revenue_trends.svg": [
       {
-        "commitHash": "abc1234",
-        "fullHash": "abc1234567890abcdef1234567890abcdef12345",
+        "commitHash": "83d80da",
+        "fullHash": "83d80da5a6a4bd4df0a7d0c1e6f39fd1542834da",
         "timestamp": "2026-01-28T14:01:30.000Z",
-        "gitPath": "images/revenue_trends_v1.svg"
+        "gitPath": "docs/images/revenue_trends.svg"
       },
       {
-        "commitHash": "def5678",
-        "fullHash": "def5678901234567890abcdef1234567890abcde",
+        "commitHash": "0c69875",
+        "fullHash": "0c69875760b57af2cc57cb163c81046b557fa8c0",
         "timestamp": "2026-01-28T14:03:55.000Z",
-        "gitPath": "images/revenue_trends.svg"
+        "gitPath": "docs/images/revenue_trends.svg"
       }
     ],
     "category_breakdown.svg": [
       {
-        "commitHash": "abc1234",
-        "fullHash": "abc1234567890abcdef1234567890abcdef12345",
+        "commitHash": "83d80da",
+        "fullHash": "83d80da5a6a4bd4df0a7d0c1e6f39fd1542834da",
         "timestamp": "2026-01-28T14:02:00.000Z",
-        "gitPath": "images/category_breakdown_v1.svg"
+        "gitPath": "docs/images/category_breakdown.svg"
       },
       {
-        "commitHash": "def5678",
-        "fullHash": "def5678901234567890abcdef1234567890abcde",
+        "commitHash": "0c69875",
+        "fullHash": "0c69875760b57af2cc57cb163c81046b557fa8c0",
         "timestamp": "2026-01-28T14:04:25.000Z",
-        "gitPath": "images/category_breakdown.svg"
+        "gitPath": "docs/images/category_breakdown.svg"
       }
     ],
     "marketing_roi.svg": [
       {
-        "commitHash": "abc1234",
-        "fullHash": "abc1234567890abcdef1234567890abcdef12345",
+        "commitHash": "83d80da",
+        "fullHash": "83d80da5a6a4bd4df0a7d0c1e6f39fd1542834da",
         "timestamp": "2026-01-28T14:02:30.000Z",
-        "gitPath": "images/marketing_roi_v1.svg"
+        "gitPath": "docs/images/marketing_roi.svg"
       },
       {
-        "commitHash": "def5678",
-        "fullHash": "def5678901234567890abcdef1234567890abcde",
+        "commitHash": "0c69875",
+        "fullHash": "0c69875760b57af2cc57cb163c81046b557fa8c0",
         "timestamp": "2026-01-28T14:04:55.000Z",
-        "gitPath": "images/marketing_roi.svg"
+        "gitPath": "docs/images/marketing_roi.svg"
       }
     ]
   }
