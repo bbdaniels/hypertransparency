@@ -1711,11 +1711,20 @@
         }
 
         // Build raw.githubusercontent.com URL from repo URL and git path
+        // For local demo paths (starting with images/ or data/), return as-is
         function getRawGitHubUrl(gitPath, commitHash) {
+            if (!gitPath) return null;
+
+            // For paths that look local (start with images/, data/, etc.), return directly
+            // This handles demo data where images are served locally instead of from git
+            if (gitPath.startsWith('images/') || gitPath.startsWith('data/')) {
+                return gitPath;
+            }
+
             // state.project.repository is like "https://github.com/owner/repo"
             // We need "https://raw.githubusercontent.com/owner/repo/{commitHash}/{gitPath}"
             const repoUrl = state.project.repository || '';
-            if (!repoUrl || !gitPath || !commitHash) return null;
+            if (!repoUrl || !commitHash) return null;
 
             const match = repoUrl.match(/github\.com\/([^\/]+)\/([^\/]+)/);
             if (!match) return null;
