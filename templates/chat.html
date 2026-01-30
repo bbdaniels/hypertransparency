@@ -1215,17 +1215,28 @@
             // Merge messages and commits into a single timeline
             const timeline = [];
 
+            // Get the time range of loaded messages
+            let minMsgTime = Infinity;
+            let maxMsgTime = -Infinity;
             visibleMessages.forEach(msg => {
+                const msgTime = new Date(msg.timestamp).getTime();
                 timeline.push({
                     type: 'message',
-                    timestamp: new Date(msg.timestamp).getTime(),
+                    timestamp: msgTime,
                     data: msg
                 });
+                if (msgTime < minMsgTime) minMsgTime = msgTime;
+                if (msgTime > maxMsgTime) maxMsgTime = msgTime;
             });
 
+            // Only show commits that fall within the loaded message time range
             state.commits.forEach(commit => {
                 // Parse commit timestamp: "2026-01-28 14:30:00 -0500" format
                 const commitTime = new Date(commit.timestamp.split(' ').slice(0,2).join('T')).getTime();
+
+                // Skip commits outside the loaded message time range
+                if (commitTime < minMsgTime || commitTime > maxMsgTime) return;
+
                 timeline.push({
                     type: 'commit',
                     timestamp: commitTime,
